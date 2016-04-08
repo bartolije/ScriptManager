@@ -35,6 +35,7 @@
             this.ForumThread = new System.Windows.Forms.DataGridViewLinkColumn();
             this.Download = new System.Windows.Forms.DataGridViewButtonColumn();
             this.DownloadUrl = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.openFileBol = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.grid_champions)).BeginInit();
             this.SuspendLayout();
             // 
@@ -108,6 +109,10 @@
             this.DownloadUrl.ReadOnly = true;
             this.DownloadUrl.Visible = false;
             // 
+            // openFileBol
+            // 
+            this.openFileBol.FileName = "openFileBol";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -132,6 +137,7 @@
         private System.Windows.Forms.DataGridViewLinkColumn ForumThread;
         private System.Windows.Forms.DataGridViewButtonColumn Download;
         private System.Windows.Forms.DataGridViewTextBoxColumn DownloadUrl;
+        private System.Windows.Forms.OpenFileDialog openFileBol;
     }
 }
 

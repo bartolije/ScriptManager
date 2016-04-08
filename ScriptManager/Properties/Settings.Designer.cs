@@ -22,5 +22,17 @@ namespace ScriptManager.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string bolFolderPath {
+            get {
+                return ((string)(this["bolFolderPath"]));
+            }
+            set {
+                this["bolFolderPath"] = value;
+            }
+        }
     }
 }
