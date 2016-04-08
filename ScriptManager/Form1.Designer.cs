@@ -34,6 +34,7 @@
             this.Author = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ForumThread = new System.Windows.Forms.DataGridViewLinkColumn();
             this.Download = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.DownloadUrl = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.grid_champions)).BeginInit();
             this.SuspendLayout();
             // 
@@ -58,7 +59,8 @@
             this.Title,
             this.Author,
             this.ForumThread,
-            this.Download});
+            this.Download,
+            this.DownloadUrl});
             this.grid_champions.Location = new System.Drawing.Point(12, 116);
             this.grid_champions.Name = "grid_champions";
             this.grid_champions.ReadOnly = true;
@@ -99,6 +101,13 @@
             this.Download.Text = "Download";
             this.Download.UseColumnTextForButtonValue = true;
             // 
+            // DownloadUrl
+            // 
+            this.DownloadUrl.HeaderText = "DownloadUrl";
+            this.DownloadUrl.Name = "DownloadUrl";
+            this.DownloadUrl.ReadOnly = true;
+            this.DownloadUrl.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -122,6 +131,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Author;
         private System.Windows.Forms.DataGridViewLinkColumn ForumThread;
         private System.Windows.Forms.DataGridViewButtonColumn Download;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DownloadUrl;
     }
 }
 

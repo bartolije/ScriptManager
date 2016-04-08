@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -15,6 +16,7 @@ namespace Scriptmanager
     public partial class Form1 : Form
     {
         string apiSearchChampion = "http://www.bol-tools.com/api/search/champion/";
+        string currentPath;
 
         public Form1()
         {
@@ -23,6 +25,7 @@ namespace Scriptmanager
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            currentPath = Path.GetDirectoryName(Application.ExecutablePath);
             // Go get all campions
 
             var championsDataSource = new List<ComboBoxItem>();
@@ -50,7 +53,7 @@ namespace Scriptmanager
                 {
                     // title, author, forum, download
                     Script scriptObject = JsonConvert.DeserializeObject<Script>(script.ToString());
-                    grid_champions.Rows.Add(scriptObject.Title, scriptObject.Author, scriptObject.ForumUrl, scriptObject.UpdateUrl);
+                    grid_champions.Rows.Add(scriptObject.Title, scriptObject.Author, scriptObject.ForumUrl, "Download", scriptObject.UpdateUrl);
                 }
             }
 
@@ -59,8 +62,44 @@ namespace Scriptmanager
 
         private void grid_champions_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            Console.WriteLine(sender.ToString());
-            Console.WriteLine(e.ToString());
+            int cellIndex = e.ColumnIndex;
+            // cell[3] is download button
+            if (cellIndex == 3)
+            {
+                // better get good script else drama will cum
+                DataGridViewRow row = grid_champions.Rows[e.RowIndex];
+                string downloadUrl = row.Cells[4].Value.ToString();
+                string scriptTitle = row.Cells[0].Value.ToString();
+
+                using( var client = new WebClient())
+                {
+                    client.DownloadFile(downloadUrl, scriptTitle+".lua");
+                    // downloaded on current folder location
+                    // now, we'll move it
+                    if(File.Exists(scriptTitle+".lua"))
+                    {
+                        string bolDllPath = Path.GetFullPath(Path.Combine(Application.StartupPath, @"../")) + "agent.dll";
+                        if(File.Exists(bolDllPath))
+                        {
+                            string bolScriptsPath = Path.GetFullPath(Path.Combine(bolDllPath, @"/Scripts/"));
+                            File.Move(scriptTitle + ".lua", bolScriptsPath);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Please, put this application in a folder, which need to be in your BoL folder.", "heeey :(] ");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("It seems the downloaded file ran aways :(", "Damn it !!");
+                    }
+                    
+                }
+
+                Console.WriteLine(downloadUrl);
+            }
+
+            
         }
     }
 }
