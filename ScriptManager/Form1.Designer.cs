@@ -41,7 +41,7 @@
             // cboChampionsList
             // 
             this.cboChampionsList.FormattingEnabled = true;
-            this.cboChampionsList.Location = new System.Drawing.Point(28, 28);
+            this.cboChampionsList.Location = new System.Drawing.Point(12, 77);
             this.cboChampionsList.Name = "cboChampionsList";
             this.cboChampionsList.Size = new System.Drawing.Size(121, 21);
             this.cboChampionsList.TabIndex = 0;

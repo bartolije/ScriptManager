@@ -10,10 +10,12 @@ using System.Text;
 using System.Windows.Forms;
 using ScriptManager.Models;
 using Newtonsoft.Json;
+using MaterialSkin.Controls;
+using MaterialSkin;
 
 namespace Scriptmanager
 {
-    public partial class Form1 : Form
+    public partial class Form1 : MaterialForm
     {
         string apiSearchChampion = "http://www.bol-tools.com/api/search/champion/";
         string currentPath;
@@ -21,6 +23,11 @@ namespace Scriptmanager
         public Form1()
         {
             InitializeComponent();
+
+            var materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
+            materialSkinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -29,6 +36,8 @@ namespace Scriptmanager
             // Go get all campions
 
             var championsDataSource = new List<ComboBoxItem>();
+            championsDataSource.Add(new ComboBoxItem("Select a champion", "-1"));
+
             championsDataSource.Add(new ComboBoxItem("Garen", "MonkeyKing"));
             championsDataSource.Add(new ComboBoxItem("Taric", "Taric"));
             championsDataSource.Add(new ComboBoxItem("Wukong", "Garen"));
@@ -43,21 +52,13 @@ namespace Scriptmanager
         private void cboChampionsList_SelectedIndexChanged(object sender, EventArgs e)
         {
             var selectedChampionkey = this.cboChampionsList.SelectedValue;
+            var url = apiSearchChampion + selectedChampionkey;
 
-            using( WebClient wc = new WebClient())
+            var scriptsList = getScriptsListFromurl(url);
+            foreach (var script in scriptsList)
             {
-                var jsonresult = wc.DownloadString(apiSearchChampion + selectedChampionkey);
-                dynamic stuff = JsonConvert.DeserializeObject(jsonresult);
-                
-                foreach(var script in stuff)
-                {
-                    // title, author, forum, download
-                    Script scriptObject = JsonConvert.DeserializeObject<Script>(script.ToString());
-                    grid_champions.Rows.Add(scriptObject.Title, scriptObject.Author, scriptObject.ForumUrl, "Download", scriptObject.UpdateUrl);
-                }
+                grid_champions.Rows.Add(script.Title, script.Author, script.ForumUrl, "Download", script.UpdateUrl);
             }
-
-            
         }
 
         private void grid_champions_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -99,7 +100,49 @@ namespace Scriptmanager
                 Console.WriteLine(downloadUrl);
             }
 
-            
+
         }
+
+        #region Private Custom Methods
+
+        private List<Script> getScriptsListFromurl(string url)
+        {
+            var scriptList = new List<Script>();
+
+            using (WebClient wc = new WebClient())
+            {
+                var jsonresult = wc.DownloadString(url);
+                dynamic stuff = JsonConvert.DeserializeObject(jsonresult);
+
+                foreach (var script in stuff)
+                {
+                    // title, author, forum, download
+                    Script scriptObject = JsonConvert.DeserializeObject<Script>(script.ToString());
+                    scriptList.Add(scriptObject);
+                }
+            }
+            return scriptList;
+        }
+
+        private List<Script> getChampionsListFromurl(string url)
+        {
+            var championList = new List<Script>();
+
+            using (WebClient wc = new WebClient())
+            {
+                var jsonresult = wc.DownloadString(url);
+                dynamic stuff = JsonConvert.DeserializeObject(jsonresult);
+
+                foreach (var champ in stuff)
+                {
+                    // title, author, forum, download
+                    Script scriptObject = JsonConvert.DeserializeObject<Champion>(champ.ToString());
+                    championList.Add(scriptObject);
+                }
+            }
+            return championList;
+        }
+
+        #endregion
     }
 }
