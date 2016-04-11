@@ -15,12 +15,15 @@ using MaterialSkin;
 using System.Reflection;
 using SharpConfig;
 using System.Diagnostics;
+using System.Globalization;
 
 
 namespace ScriptManager
 {
     public partial class ScriptManagerForm : MaterialForm
     {
+        // TODO: make string as ressources and load them depending of current computer language
+ 
         const string INIFILE = "conf.ini";
         const string BOLNAME = "BoL Studio.exe";
         const string DLLNAME = "agent.dll";
@@ -136,7 +139,7 @@ namespace ScriptManager
             }
         }
 
-        private List<Script> getScriptsListFromUrl(string url)
+        private static List<Script> getScriptsListFromUrl(string url)
         {
             var scriptList = new List<Script>();
 
@@ -155,7 +158,7 @@ namespace ScriptManager
             return scriptList;
         }
 
-        private List<Script> getChampionsListFromUrl(string url)
+        private static List<Script> getChampionsListFromUrl(string url)
         {
             var championList = new List<Script>();
 
@@ -269,25 +272,30 @@ namespace ScriptManager
             }
         }
 
-        private void writeStringSettingsToConf(string section, string key, string value)
+        private static void writeStringSettingsToConf(string section, string key, string value)
         {
             Configuration conf = Configuration.LoadFromFile(INIFILE); 
             conf[section][key].StringValue = value;
             conf.SaveToFile(INIFILE);
         }
 
-        private void writeBoolSettingsToConf(string section, string key, bool value)
+        private static void writeBoolSettingsToConf(string section, string key, bool value)
         {
             Configuration conf = Configuration.LoadFromFile(INIFILE); 
             conf[section][key].BoolValue = value;
             conf.SaveToFile(INIFILE);
         }
 
-        private void writeIntSettingsToConf(string section, string key, int value)
+        private static void writeIntSettingsToConf(string section, string key, int value)
         {
             Configuration conf = Configuration.LoadFromFile(INIFILE); 
             conf[section][key].IntValue = value;
             conf.SaveToFile(INIFILE);
+        }
+
+        private static string getCurrentCulture()
+        {
+            return CultureInfo.CurrentCulture.Name;
         }
 
         #endregion
@@ -368,13 +376,14 @@ namespace ScriptManager
             // wrong one
         }
 
-        #endregion
-
         private void ScriptManagerForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             // Generate log file on leave (check settings)
             exportLogsFromCombo();
         }
+
+        #endregion
+
 
         
 
