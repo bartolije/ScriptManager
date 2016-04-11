@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MadMilkman.Ini;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,10 +15,13 @@ using MaterialSkin.Controls;
 using MaterialSkin;
 using System.Reflection;
 
+
 namespace Scriptmanager
 {
     public partial class Form1 : MaterialForm
     {
+        const string INIFILE = "conf.ini";
+
         string apiSearchChampion = "http://www.bol-tools.com/api/search/champion/";
         string currentPath;
         string bolPath;
@@ -48,19 +52,41 @@ namespace Scriptmanager
 
             // check version for auto-update
             version = Assembly.GetEntryAssembly().GetName().Version;
-
-            // check app properties
-            bolPath = ScriptManager.Properties.Settings.Default["bolFolderPath"].ToString();
-            if(bolPath.Length < 1)
+            
+            // conf ifle
+            if (File.Exists(INIFILE))
             {
-                DialogResult result = openFileBol.ShowDialog();
-                if (result == DialogResult.OK)
+                IniOptions options = new IniOptions();
+                IniFile file = new IniFile(options);
+                file.Load(@INIFILE);
+                
+                // Read file's content.
+                foreach (var section in file.Sections)
                 {
-                    bolPath = Path.GetDirectoryName(openFileBol.FileName);
-                    ScriptManager.Properties.Settings.Default["bolFolderPath"] = bolPath;
-                    ScriptManager.Properties.Settings.Default.Save();
+                    Console.WriteLine("SECTION: {0}", section.Name);
+                    foreach (var key in section.Keys)
+                        Console.WriteLine("KEY: {0}, VALUE: {1}", key.Name, key.Value);
                 }
+
+                bolPath = file.Sections["Path"].Keys["bolPath"].Value;
             }
+            else
+            {
+                IniFile file = new IniFile();
+                IniSection section = file.Sections.Add("Path");
+                section.TrailingComment.Text = "defaultPath";
+
+                // Add new key and its value.
+                IniKey key = section.Keys.Add("bolPath", "");
+                file.Save("conf.ini");
+            }
+
+            if(bolPath.Length < 2)
+            {
+                // bolPath not set, just search it / ask path to user
+                DialogResult result = openFileBol.ShowDialog();
+            }
+            
 
             // Go get all campions
             var championsDataSource = new List<ComboBoxItem>();
@@ -79,6 +105,8 @@ namespace Scriptmanager
 
         private void cboChampionsList_SelectedIndexChanged(object sender, EventArgs e)
         {
+            grid_champions.Rows.Clear();
+
             var selectedChampionkey = this.cboChampionsList.SelectedValue;
             var url = apiSearchChampion + selectedChampionkey;
 
@@ -104,9 +132,9 @@ namespace Scriptmanager
                 using( var client = new WebClient())
                 {
                     client.DownloadFile(downloadUrl, scriptTitle+".lua");
-                    postDownload(scriptTitle + ".lua");
                 }
 
+                postDownload(scriptTitle + ".lua");
                 Console.WriteLine(downloadUrl);
             }
         }
@@ -116,28 +144,14 @@ namespace Scriptmanager
         // after download, some check and move file to Script/ folder
         private void postDownload(string scriptFileName)
         {
-            if (File.Exists(scriptFileName))
+            try
             {
-                // which file better search? ("BoL Studio.exe" + "agent.dll"?)
-                string bolDllPath = Path.GetFullPath(Path.Combine(Application.StartupPath, @"../")) + "agent.dll";
-                if (File.Exists(bolDllPath))
-                {
-                    // we got BoL base folder
-                    string bolScriptsPath = Path.GetFullPath(Path.Combine(bolDllPath, @"/Scripts/"));
-                    File.Move(Path.GetFullPath(scriptFileName), bolScriptsPath);
-                }
-                else
-                {
-                    // TODO
-                    // Error, but better search or ask the dir
-                    MessageBox.Show("Please, put this application in a folder, which need to be in your BoL folder.", "heeey :(] ");
-                    
-                }
-            }
-            else
+                File.Move(scriptFileName, "/Scripts/"+ scriptFileName);
+            }catch(Exception ex)
             {
-                MessageBox.Show("It seems the downloaded file ran aways :(", "Damn it !!");
+                MessageBox.Show(ex.ToString(), "error while moveFile");
             }
+            
         }
 
         private List<Script> getScriptsListFromurl(string url)
