@@ -1,4 +1,4 @@
-﻿namespace Scriptmanager
+﻿namespace ScriptManager
 {
     partial class ScriptManagerForm
     {
@@ -290,6 +290,7 @@
             this.Controls.Add(this.tabControl);
             this.Name = "ScriptManagerForm";
             this.Text = "Script Manager";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ScriptManagerForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Leave += new System.EventHandler(this.ScriptManagerForm_Leave);
             ((System.ComponentModel.ISupportInitialize)(this.grid_champions)).EndInit();

@@ -17,7 +17,7 @@ using SharpConfig;
 using System.Diagnostics;
 
 
-namespace Scriptmanager
+namespace ScriptManager
 {
     public partial class ScriptManagerForm : MaterialForm
     {
@@ -37,12 +37,6 @@ namespace Scriptmanager
         public ScriptManagerForm()
         {
             InitializeComponent();
-
-            // TODO: Merge all DLL into the exe.
-            // Choose ILMerge or Costura.Fody ( https://github.com/Fody/Costura )
-            // http://stackoverflow.com/questions/10137937/merge-dll-into-exe
-            // http://stackoverflow.com/questions/12307602/understanding-ilmerge-how-to-pack-an-executable-with-all-its-associated-dlls
-            // http://stackoverflow.com/questions/25578362/combine-net-external-dlls-to-a-single-executable-file
 
             // Skin to get a non instant eyes-bleeding GUI
             // https://github.com/IgnaceMaes/MaterialSkin
@@ -80,65 +74,13 @@ namespace Scriptmanager
             {
                 // test purpose
                 writeLog("Found ini file");
-                Configuration conf = Configuration.LoadFromFile(INIFILE); 
-                bolPath = Convert.ToString(conf["Path"]["bolPath"].StringValue);
-                if ((File.Exists(bolPath + "/"+ BOLNAME) && File.Exists(bolPath + "/"+ DLLNAME))|| File.Exists(bolPath + "/agent.txt"))
-                {
-                    // ready to go
-                    writeLog("Found files, seems we are ready.");
-
-                    // load config from ini file
-                    writeLog("Load settings from config.");
-                    try
-                    {
-                        replaceScript = Convert.ToBoolean(conf["Settings"]["replace"].StringValue);
-                        moveScript = Convert.ToBoolean(conf["Settings"]["move"].StringValue);
-                    }
-                    catch(Exception ex)
-                    {
-                        writeLog("fail load settings: "+ex.ToString());
-                        MessageBox.Show("Error L04DF411.\n Impossible to load settings. ", "An error occured");
-                    }
-                }
-                else
-                {
-                    writeLog("BoL Studio or agent.dll not found.");
-                    MessageBox.Show("Impossible to find folder. Error N07F01D3R.\n Application will now exit.", "An error occured");
-                    Application.Exit();
-                }
+                loadSettingsFromConfig();
             }
             else
             {
                 // ask bolPath
                 writeLog("New start, searching BoL folder");
-
-                openFileBol.Filter = "BoL Studio|*.exe|DLL Agent|*.dll|All file|*.*";
-                openFileBol.Title = "Please, select your BoL Studio exe or the agent.dll";
-
-                DialogResult result = openFileBol.ShowDialog();
-                if(result == DialogResult.OK)
-                {
-                    bolPath = Path.GetDirectoryName(openFileBol.FileName);
-
-                    if((File.Exists(bolPath + "/"+BOLNAME) && File.Exists(bolPath + "/"+DLLNAME)) || File.Exists(bolPath + "/agent.txt"))
-                    {
-                        // we got some good things
-                        Configuration conf = new Configuration();
-                        conf["Path"]["bolPath"].StringValue = bolPath;
-                        conf["Settings"]["replace"].BoolValue = replaceScript;
-                        conf["Settings"]["move"].BoolValue = moveScript;
-                        conf["Constant"]["bolName"].StringValue = BOLNAME;
-                        conf["Constant"]["dllName"].StringValue = DLLNAME;
-                        conf["Debug"]["debug"].BoolValue = true;
-                        conf.SaveToFile(INIFILE);
-                    }
-                    else
-                    {
-                        writeLog("BoL Studio or agent.dll not found.");
-                        MessageBox.Show("Impossible to find folder. Error N07F01D3R.\n Application will now exit.", "An error occured");
-                        Application.Exit();
-                    }
-                }
+                getBolPathFolder();
             }
 
             #endregion
@@ -154,9 +96,9 @@ namespace Scriptmanager
 
             
             // set display & value, readonly
-            this.cboChampionsList.DataSource = championsDataSource;
-            this.cboChampionsList.DisplayMember = "Name";
-            this.cboChampionsList.ValueMember = "Value";
+            cboChampionsList.DataSource = championsDataSource;
+            cboChampionsList.DisplayMember = "Name";
+            cboChampionsList.ValueMember = "Value"; // Error here
         }
 
         #region Private Custom Methods
@@ -189,7 +131,7 @@ namespace Scriptmanager
                 {
                     writeLog("Moving file failed.");
                     writeLog(ex.ToString());
-                    MessageBox.Show("A wild error appear, I'm so scared. Error N01M0V310F01D3R.", "An error occured");
+                    MessageBox.Show("Impossible to move file.\n. Error N01M0V310F01D3R.", "An error occured");
                 }
             }
         }
@@ -255,17 +197,108 @@ namespace Scriptmanager
             }
         }
 
+        private void getBolPathFolder()
+        {
+            bool isValidPath = false;
+            do {
+                openFileBol.Filter = "BoL Studio|*.exe|DLL Agent|*.dll|All file|*.*";
+                openFileBol.Title = "Please, select your BoL Studio exe or the agent.dll";
+
+                DialogResult result = openFileBol.ShowDialog();
+                if(result == DialogResult.OK)
+                {
+                    bolPath = Path.GetDirectoryName(openFileBol.FileName);
+
+                    if((File.Exists(bolPath + "/"+BOLNAME) && File.Exists(bolPath + "/"+DLLNAME)) || File.Exists(bolPath + "/agent.txt"))
+                    {
+                        // we got some good things
+                        createFreshConfigFile();
+                        isValidPath = true;
+                    }
+                    else
+                    {
+                        writeLog("BoL Studio or agent.dll not found.");
+                        MessageBox.Show("Impossible to find folder.\nError N07F01D3R.", "An error occured");
+                    }
+                }else {
+                    writeLog("User cancelled file pick.");
+                    Application.Exit();
+                }
+            }while(!isValidPath);
+        }
+
+        private void createFreshConfigFile()
+        {
+            Configuration conf = new Configuration();
+            conf["Path"]["bolPath"].StringValue = bolPath;
+            conf["Settings"]["replace"].BoolValue = replaceScript;
+            conf["Settings"]["move"].BoolValue = moveScript;
+            conf["Constant"]["bolName"].StringValue = BOLNAME;
+            conf["Constant"]["dllName"].StringValue = DLLNAME;
+            conf["Debug"]["debug"].BoolValue = true;
+            conf.SaveToFile(INIFILE);
+        }
+
+        private void loadSettingsFromConfig()
+        {
+            Configuration conf = Configuration.LoadFromFile(INIFILE); 
+            bolPath = Convert.ToString(conf["Path"]["bolPath"].StringValue);
+            if ((File.Exists(bolPath + "/"+ BOLNAME) && File.Exists(bolPath + "/"+ DLLNAME))|| File.Exists(bolPath + "/agent.txt"))
+            {
+                // ready to go
+                writeLog("Found files, seems we are ready.");
+
+                // load config from ini file
+                writeLog("Load settings from config.");
+                try
+                {
+                    replaceScript = Convert.ToBoolean(conf["Settings"]["replace"].StringValue);
+                    moveScript = Convert.ToBoolean(conf["Settings"]["move"].StringValue);
+                }
+                catch(Exception ex)
+                {
+                    writeLog("fail load settings.");
+                    MessageBox.Show("Impossible to load settings.\nError L04DF411. ", "An error occured");
+                }
+            }
+            else
+            {
+                writeLog("BoL Studio or agent.dll not found.");
+                MessageBox.Show("Impossible to find folder.\nError N07F01D3R.", "An error occured");
+                getBolPathFolder();
+            }
+        }
+
+        private void writeStringSettingsToConf(string section, string key, string value)
+        {
+            Configuration conf = Configuration.LoadFromFile(INIFILE); 
+            conf[section][key].StringValue = value;
+            conf.SaveToFile(INIFILE);
+        }
+
+        private void writeBoolSettingsToConf(string section, string key, bool value)
+        {
+            Configuration conf = Configuration.LoadFromFile(INIFILE); 
+            conf[section][key].BoolValue = value;
+            conf.SaveToFile(INIFILE);
+        }
+
+        private void writeIntSettingsToConf(string section, string key, int value)
+        {
+            Configuration conf = Configuration.LoadFromFile(INIFILE); 
+            conf[section][key].IntValue = value;
+            conf.SaveToFile(INIFILE);
+        }
 
         #endregion
 
         #region GUI events
 
-
         private void cboChampionsList_SelectedIndexChanged(object sender, EventArgs e)
         {
             grid_champions.Rows.Clear();
 
-            if ((string)cboChampionsList.SelectedValue == "default")
+            if (cboChampionsList.SelectedValue.ToString() == "default")
             {
                 writeLog("Default value, wrong champion");
                 return;
@@ -313,27 +346,35 @@ namespace Scriptmanager
         {
             debug = cbDebug.Checked;
             writeLog("Debug set to"+cbDebug.Checked.ToString(), true);
+            writeBoolSettingsToConf("Debug", "debug", debug);
         }
 
         private void cbMoveScripts_CheckedChanged(object sender, EventArgs e)
         {
             moveScript = cbMoveScripts.Checked;
             writeLog("Move Script set to" + cbMoveScripts.Checked.ToString(), true);
+            writeBoolSettingsToConf("Settings", "move", moveScript);
         }
 
         private void cbReplaceScript_CheckedChanged(object sender, EventArgs e)
         {
             replaceScript = cbReplaceScript.Checked;
             writeLog("Replace Script set to" + cbReplaceScript.Checked.ToString(), true);
+            writeBoolSettingsToConf("Settings", "replace", replaceScript);
         }
 
         private void ScriptManagerForm_Leave(object sender, EventArgs e)
         {
-            // Generate log file on leave (check settings)
-            exportLogsFromCombo();
+            // wrong one
         }
 
         #endregion
+
+        private void ScriptManagerForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Generate log file on leave (check settings)
+            exportLogsFromCombo();
+        }
 
         
 
