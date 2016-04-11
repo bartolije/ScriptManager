@@ -1,6 +1,6 @@
 ﻿namespace Scriptmanager
 {
-    partial class Form1
+    partial class ScriptManagerForm
     {
         /// <summary>
         /// Required designer variable.
@@ -40,11 +40,14 @@
             this.tabMain = new System.Windows.Forms.TabPage();
             this.tabSettings = new System.Windows.Forms.TabPage();
             this.groupDebug = new System.Windows.Forms.GroupBox();
+            this.cbReplaceScript = new System.Windows.Forms.CheckBox();
             this.cbDebug = new System.Windows.Forms.CheckBox();
             this.groupBasic = new System.Windows.Forms.GroupBox();
             this.cbMoveScripts = new System.Windows.Forms.CheckBox();
             this.tabLogs = new System.Windows.Forms.TabPage();
             this.tbLogs = new System.Windows.Forms.TextBox();
+            this.tabAbout = new System.Windows.Forms.TabPage();
+            this.lAuthor = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.grid_champions)).BeginInit();
             this.tabControl.SuspendLayout();
             this.tabMain.SuspendLayout();
@@ -52,6 +55,7 @@
             this.groupDebug.SuspendLayout();
             this.groupBasic.SuspendLayout();
             this.tabLogs.SuspendLayout();
+            this.tabAbout.SuspendLayout();
             this.SuspendLayout();
             // 
             // cboChampionsList
@@ -140,6 +144,7 @@
             this.tabControl.Controls.Add(this.tabMain);
             this.tabControl.Controls.Add(this.tabSettings);
             this.tabControl.Controls.Add(this.tabLogs);
+            this.tabControl.Controls.Add(this.tabAbout);
             this.tabControl.Location = new System.Drawing.Point(12, 64);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
@@ -173,13 +178,28 @@
             // groupDebug
             // 
             this.groupDebug.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupDebug.Controls.Add(this.cbReplaceScript);
             this.groupDebug.Controls.Add(this.cbDebug);
-            this.groupDebug.Location = new System.Drawing.Point(314, 6);
+            this.groupDebug.Location = new System.Drawing.Point(308, 6);
             this.groupDebug.Name = "groupDebug";
             this.groupDebug.Size = new System.Drawing.Size(205, 156);
             this.groupDebug.TabIndex = 6;
             this.groupDebug.TabStop = false;
             this.groupDebug.Text = "Debug";
+            // 
+            // cbReplaceScript
+            // 
+            this.cbReplaceScript.AutoSize = true;
+            this.cbReplaceScript.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cbReplaceScript.Checked = true;
+            this.cbReplaceScript.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbReplaceScript.Location = new System.Drawing.Point(57, 42);
+            this.cbReplaceScript.Name = "cbReplaceScript";
+            this.cbReplaceScript.Size = new System.Drawing.Size(126, 17);
+            this.cbReplaceScript.TabIndex = 5;
+            this.cbReplaceScript.Text = "Replace script if exist";
+            this.cbReplaceScript.UseVisualStyleBackColor = true;
+            this.cbReplaceScript.CheckedChanged += new System.EventHandler(this.cbReplaceScript_CheckedChanged);
             // 
             // cbDebug
             // 
@@ -187,7 +207,7 @@
             this.cbDebug.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.cbDebug.Checked = true;
             this.cbDebug.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbDebug.Location = new System.Drawing.Point(113, 19);
+            this.cbDebug.Location = new System.Drawing.Point(97, 19);
             this.cbDebug.Name = "cbDebug";
             this.cbDebug.Size = new System.Drawing.Size(86, 17);
             this.cbDebug.TabIndex = 4;
@@ -220,6 +240,7 @@
             // 
             // tabLogs
             // 
+            this.tabLogs.AutoScroll = true;
             this.tabLogs.Controls.Add(this.tbLogs);
             this.tabLogs.Location = new System.Drawing.Point(4, 22);
             this.tabLogs.Name = "tabLogs";
@@ -241,15 +262,36 @@
             this.tbLogs.Size = new System.Drawing.Size(507, 282);
             this.tbLogs.TabIndex = 0;
             // 
-            // Form1
+            // tabAbout
+            // 
+            this.tabAbout.Controls.Add(this.lAuthor);
+            this.tabAbout.Location = new System.Drawing.Point(4, 22);
+            this.tabAbout.Name = "tabAbout";
+            this.tabAbout.Size = new System.Drawing.Size(519, 294);
+            this.tabAbout.TabIndex = 3;
+            this.tabAbout.Text = "About";
+            this.tabAbout.UseVisualStyleBackColor = true;
+            // 
+            // lAuthor
+            // 
+            this.lAuthor.AutoSize = true;
+            this.lAuthor.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lAuthor.Location = new System.Drawing.Point(148, 248);
+            this.lAuthor.Name = "lAuthor";
+            this.lAuthor.Size = new System.Drawing.Size(214, 46);
+            this.lAuthor.TabIndex = 0;
+            this.lAuthor.Text = "FreakyBart";
+            // 
+            // ScriptManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(551, 396);
             this.Controls.Add(this.tabControl);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "ScriptManagerForm";
+            this.Text = "Script Manager";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Leave += new System.EventHandler(this.ScriptManagerForm_Leave);
             ((System.ComponentModel.ISupportInitialize)(this.grid_champions)).EndInit();
             this.tabControl.ResumeLayout(false);
             this.tabMain.ResumeLayout(false);
@@ -260,6 +302,8 @@
             this.groupBasic.PerformLayout();
             this.tabLogs.ResumeLayout(false);
             this.tabLogs.PerformLayout();
+            this.tabAbout.ResumeLayout(false);
+            this.tabAbout.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -283,6 +327,9 @@
         private System.Windows.Forms.CheckBox cbMoveScripts;
         private System.Windows.Forms.GroupBox groupDebug;
         private System.Windows.Forms.GroupBox groupBasic;
+        private System.Windows.Forms.CheckBox cbReplaceScript;
+        private System.Windows.Forms.TabPage tabAbout;
+        private System.Windows.Forms.Label lAuthor;
     }
 }
 

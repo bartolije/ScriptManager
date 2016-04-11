@@ -19,7 +19,7 @@ using System.Diagnostics;
 
 namespace Scriptmanager
 {
-    public partial class Form1 : MaterialForm
+    public partial class ScriptManagerForm : MaterialForm
     {
         const string INIFILE = "conf.ini";
         const string BOLNAME = "BoL Studio.exe";
@@ -32,8 +32,9 @@ namespace Scriptmanager
 
         bool debug = true;
         bool moveScript = true;
+        bool replaceScript = true;
 
-        public Form1()
+        public ScriptManagerForm()
         {
             InitializeComponent();
 
@@ -65,8 +66,10 @@ namespace Scriptmanager
             version = Assembly.GetEntryAssembly().GetName().Version;
             writeLog("App version: " + version);
 
-            // check settings
+            // check settings ==> Default
             debug = cbDebug.Checked;
+            replaceScript = cbReplaceScript.Checked;
+            moveScript = cbMoveScripts.Checked;
             
             // conf file
             // https://github.com/cemdervis/SharpConfig/blob/master/Example/Program.cs
@@ -77,12 +80,25 @@ namespace Scriptmanager
             {
                 // test purpose
                 writeLog("Found ini file");
-                Configuration conf = Configuration.LoadFromFile(INIFILE);
-                bolPath = conf["Path"]["bolPath"].StringValue;
+                Configuration conf = Configuration.LoadFromFile(INIFILE); 
+                bolPath = Convert.ToString(conf["Path"]["bolPath"].StringValue);
                 if ((File.Exists(bolPath + "/"+ BOLNAME) && File.Exists(bolPath + "/"+ DLLNAME))|| File.Exists(bolPath + "/agent.txt"))
                 {
                     // ready to go
                     writeLog("Found files, seems we are ready.");
+
+                    // load config from ini file
+                    writeLog("Load settings from config.");
+                    try
+                    {
+                        replaceScript = Convert.ToBoolean(conf["Settings"]["replace"].StringValue);
+                        moveScript = Convert.ToBoolean(conf["Settings"]["move"].StringValue);
+                    }
+                    catch(Exception ex)
+                    {
+                        writeLog("fail load settings: "+ex.ToString());
+                        MessageBox.Show("Error L04DF411.\n Impossible to load settings. ", "An error occured");
+                    }
                 }
                 else
                 {
@@ -109,9 +125,11 @@ namespace Scriptmanager
                         // we got some good things
                         Configuration conf = new Configuration();
                         conf["Path"]["bolPath"].StringValue = bolPath;
-                        conf["constant"]["bolName"].StringValue = BOLNAME;
-                        conf["constant"]["dllName"].StringValue = DLLNAME;
-                        conf["debug"]["debug"].BoolValue = false;
+                        conf["Settings"]["replace"].BoolValue = replaceScript;
+                        conf["Settings"]["move"].BoolValue = moveScript;
+                        conf["Constant"]["bolName"].StringValue = BOLNAME;
+                        conf["Constant"]["dllName"].StringValue = DLLNAME;
+                        conf["Debug"]["debug"].BoolValue = true;
                         conf.SaveToFile(INIFILE);
                     }
                     else
@@ -128,7 +146,7 @@ namespace Scriptmanager
             // Go get all campions
             writeLog("Loading champions for bol-tools API");
             var championsDataSource = new List<ComboBoxItem>();
-            championsDataSource.Add(new ComboBoxItem("Select a champion", "-1"));
+            championsDataSource.Add(new ComboBoxItem("Select a champion", "default"));
 
             championsDataSource.Add(new ComboBoxItem("Garen", "MonkeyKing"));
             championsDataSource.Add(new ComboBoxItem("Taric", "Taric"));
@@ -139,56 +157,6 @@ namespace Scriptmanager
             this.cboChampionsList.DataSource = championsDataSource;
             this.cboChampionsList.DisplayMember = "Name";
             this.cboChampionsList.ValueMember = "Value";
-        }
-
-        private void cboChampionsList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            grid_champions.Rows.Clear();
-
-            if (this.cboChampionsList.SelectedValue == "-1")
-            {
-                writeLog("Default value, wrong champion");
-                return;
-            }
-
-            var selectedChampionkey = this.cboChampionsList.SelectedValue;
-            var url = apiSearchChampion + selectedChampionkey;
-
-            var scriptsList = getScriptsListFromurl(url);
-            foreach (var script in scriptsList)
-            {
-                grid_champions.Rows.Add(script.Title, script.Author, script.ForumUrl, "Download", script.UpdateUrl);
-            }
-        }
-
-        private void grid_champions_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            int cellIndex = e.ColumnIndex;
-            DataGridViewRow row = grid_champions.Rows[e.RowIndex];
-            if (cellIndex == 2)
-            {
-                writeLog("Click on link, open browser...");
-                string forumUrl = row.Cells[2].Value.ToString();
-                // TODO: check it cause it bugs 
-                Process.Start(forumUrl);
-            }
-
-            if (cellIndex == 3)
-            {
-                // TODO: Fix link (doesn't open browser to forum link)
-                // better get good script else drama will cum
-                string downloadUrl = row.Cells[4].Value.ToString();
-                string scriptTitle = row.Cells[0].Value.ToString();
-
-                writeLog("Clicked button, downloading file");
-                using( var client = new WebClient())
-                {
-                    client.DownloadFile(downloadUrl, scriptTitle+".lua");
-                }
-                writeLog("File Downloaded");
-                postDownload(scriptTitle + ".lua");
-                Console.WriteLine(downloadUrl);
-            }
         }
 
         #region Private Custom Methods
@@ -208,6 +176,11 @@ namespace Scriptmanager
                     if(File.Exists(toPath))
                     {
                         writeLog("Script already exist, erase it.");
+                        if(!replaceScript)
+                        {
+                            writeLog("Nope. User doesn't want. Abort.");
+                            return;
+                        }
                         File.Delete(toPath);
                     }
                     File.Move(fromPath, toPath);
@@ -221,7 +194,7 @@ namespace Scriptmanager
             }
         }
 
-        private List<Script> getScriptsListFromurl(string url)
+        private List<Script> getScriptsListFromUrl(string url)
         {
             var scriptList = new List<Script>();
 
@@ -240,7 +213,7 @@ namespace Scriptmanager
             return scriptList;
         }
 
-        private List<Script> getChampionsListFromurl(string url)
+        private List<Script> getChampionsListFromUrl(string url)
         {
             var championList = new List<Script>();
 
@@ -268,7 +241,73 @@ namespace Scriptmanager
             tbLogs.Text += Environment.NewLine;
         }
 
+        private void exportLogsFromCombo()
+        {
+            if(File.Exists("logs.txt"))
+            {
+                File.Delete("logs.txt");
+            }
+
+            var bytes = Encoding.UTF8.GetBytes(tbLogs.Text);
+            using(var file = File.OpenWrite("logs.txt"))
+            {
+                file.Write(bytes, 0, bytes.Length);
+            }
+        }
+
+
         #endregion
+
+        #region GUI events
+
+
+        private void cboChampionsList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            grid_champions.Rows.Clear();
+
+            if ((string)cboChampionsList.SelectedValue == "default")
+            {
+                writeLog("Default value, wrong champion");
+                return;
+            }
+
+            var selectedChampionkey = this.cboChampionsList.SelectedValue;
+            var url = apiSearchChampion + selectedChampionkey;
+
+            var scriptsList = getScriptsListFromUrl(url);
+            foreach (var script in scriptsList)
+            {
+                grid_champions.Rows.Add(script.Title, script.Author, script.ForumUrl, "Download", script.UpdateUrl);
+            }
+        }
+
+        private void grid_champions_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int cellIndex = e.ColumnIndex;
+            DataGridViewRow row = grid_champions.Rows[e.RowIndex];
+            if (cellIndex == 2)
+            {
+                writeLog("Click on link, open browser...");
+                string forumUrl = row.Cells[2].Value.ToString();
+                // TODO: check it cause it bugs 
+                Process.Start(forumUrl);
+            }
+
+            if (cellIndex == 3)
+            {
+                // better get good script else drama will cum
+                string downloadUrl = row.Cells[4].Value.ToString();
+                string scriptTitle = row.Cells[0].Value.ToString();
+
+                writeLog("Clicked button, downloading file");
+                using (var client = new WebClient())
+                {
+                    client.DownloadFile(downloadUrl, scriptTitle + ".lua");
+                }
+                writeLog("File Downloaded");
+                postDownload(scriptTitle + ".lua");
+            }
+        }
 
         private void cbDebug_CheckedChanged(object sender, EventArgs e)
         {
@@ -281,5 +320,22 @@ namespace Scriptmanager
             moveScript = cbMoveScripts.Checked;
             writeLog("Move Script set to" + cbMoveScripts.Checked.ToString(), true);
         }
+
+        private void cbReplaceScript_CheckedChanged(object sender, EventArgs e)
+        {
+            replaceScript = cbReplaceScript.Checked;
+            writeLog("Replace Script set to" + cbReplaceScript.Checked.ToString(), true);
+        }
+
+        private void ScriptManagerForm_Leave(object sender, EventArgs e)
+        {
+            // Generate log file on leave (check settings)
+            exportLogsFromCombo();
+        }
+
+        #endregion
+
+        
+
     }
 }
