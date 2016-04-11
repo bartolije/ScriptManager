@@ -36,13 +36,28 @@
             this.Download = new System.Windows.Forms.DataGridViewButtonColumn();
             this.DownloadUrl = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.openFileBol = new System.Windows.Forms.OpenFileDialog();
+            this.tabControl = new System.Windows.Forms.TabControl();
+            this.tabMain = new System.Windows.Forms.TabPage();
+            this.tabLogs = new System.Windows.Forms.TabPage();
+            this.tbLogs = new System.Windows.Forms.TextBox();
+            this.tabSettings = new System.Windows.Forms.TabPage();
+            this.cbMoveScripts = new System.Windows.Forms.CheckBox();
+            this.cbDebug = new System.Windows.Forms.CheckBox();
+            this.groupBasic = new System.Windows.Forms.GroupBox();
+            this.groupDebug = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.grid_champions)).BeginInit();
+            this.tabControl.SuspendLayout();
+            this.tabMain.SuspendLayout();
+            this.tabLogs.SuspendLayout();
+            this.tabSettings.SuspendLayout();
+            this.groupBasic.SuspendLayout();
+            this.groupDebug.SuspendLayout();
             this.SuspendLayout();
             // 
             // cboChampionsList
             // 
             this.cboChampionsList.FormattingEnabled = true;
-            this.cboChampionsList.Location = new System.Drawing.Point(12, 77);
+            this.cboChampionsList.Location = new System.Drawing.Point(6, 6);
             this.cboChampionsList.Name = "cboChampionsList";
             this.cboChampionsList.Size = new System.Drawing.Size(121, 21);
             this.cboChampionsList.TabIndex = 0;
@@ -62,10 +77,10 @@
             this.ForumThread,
             this.Download,
             this.DownloadUrl});
-            this.grid_champions.Location = new System.Drawing.Point(12, 116);
+            this.grid_champions.Location = new System.Drawing.Point(6, 57);
             this.grid_champions.Name = "grid_champions";
             this.grid_champions.ReadOnly = true;
-            this.grid_champions.Size = new System.Drawing.Size(506, 268);
+            this.grid_champions.Size = new System.Drawing.Size(508, 231);
             this.grid_champions.TabIndex = 1;
             this.grid_champions.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grid_champions_CellClick);
             // 
@@ -113,17 +128,128 @@
             // 
             this.openFileBol.FileName = "openFileBol";
             // 
+            // tabControl
+            // 
+            this.tabControl.AccessibleName = "Main";
+            this.tabControl.Controls.Add(this.tabMain);
+            this.tabControl.Controls.Add(this.tabSettings);
+            this.tabControl.Controls.Add(this.tabLogs);
+            this.tabControl.Location = new System.Drawing.Point(12, 64);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(527, 320);
+            this.tabControl.TabIndex = 2;
+            // 
+            // tabMain
+            // 
+            this.tabMain.Controls.Add(this.grid_champions);
+            this.tabMain.Controls.Add(this.cboChampionsList);
+            this.tabMain.Location = new System.Drawing.Point(4, 22);
+            this.tabMain.Name = "tabMain";
+            this.tabMain.Padding = new System.Windows.Forms.Padding(3);
+            this.tabMain.Size = new System.Drawing.Size(519, 294);
+            this.tabMain.TabIndex = 0;
+            this.tabMain.Text = "Main";
+            this.tabMain.UseVisualStyleBackColor = true;
+            // 
+            // tabLogs
+            // 
+            this.tabLogs.Controls.Add(this.tbLogs);
+            this.tabLogs.Location = new System.Drawing.Point(4, 22);
+            this.tabLogs.Name = "tabLogs";
+            this.tabLogs.Padding = new System.Windows.Forms.Padding(3);
+            this.tabLogs.Size = new System.Drawing.Size(519, 294);
+            this.tabLogs.TabIndex = 1;
+            this.tabLogs.Text = "Logs";
+            this.tabLogs.UseVisualStyleBackColor = true;
+            // 
+            // tbLogs
+            // 
+            this.tbLogs.Location = new System.Drawing.Point(6, 6);
+            this.tbLogs.Multiline = true;
+            this.tbLogs.Name = "tbLogs";
+            this.tbLogs.ReadOnly = true;
+            this.tbLogs.Size = new System.Drawing.Size(507, 282);
+            this.tbLogs.TabIndex = 0;
+            // 
+            // tabSettings
+            // 
+            this.tabSettings.Controls.Add(this.groupDebug);
+            this.tabSettings.Controls.Add(this.groupBasic);
+            this.tabSettings.Location = new System.Drawing.Point(4, 22);
+            this.tabSettings.Name = "tabSettings";
+            this.tabSettings.Padding = new System.Windows.Forms.Padding(3);
+            this.tabSettings.Size = new System.Drawing.Size(519, 294);
+            this.tabSettings.TabIndex = 2;
+            this.tabSettings.Text = "Settings";
+            this.tabSettings.UseVisualStyleBackColor = true;
+            // 
+            // cbMoveScripts
+            // 
+            this.cbMoveScripts.AutoSize = true;
+            this.cbMoveScripts.Checked = true;
+            this.cbMoveScripts.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbMoveScripts.Location = new System.Drawing.Point(6, 19);
+            this.cbMoveScripts.Name = "cbMoveScripts";
+            this.cbMoveScripts.Size = new System.Drawing.Size(171, 17);
+            this.cbMoveScripts.TabIndex = 3;
+            this.cbMoveScripts.Text = "Move script when downloaded";
+            this.cbMoveScripts.UseVisualStyleBackColor = true;
+            this.cbMoveScripts.CheckedChanged += new System.EventHandler(this.cbMoveScripts_CheckedChanged);
+            // 
+            // cbDebug
+            // 
+            this.cbDebug.AutoSize = true;
+            this.cbDebug.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cbDebug.Checked = true;
+            this.cbDebug.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbDebug.Location = new System.Drawing.Point(113, 19);
+            this.cbDebug.Name = "cbDebug";
+            this.cbDebug.Size = new System.Drawing.Size(86, 17);
+            this.cbDebug.TabIndex = 4;
+            this.cbDebug.Text = "Logs actions";
+            this.cbDebug.UseVisualStyleBackColor = true;
+            this.cbDebug.CheckedChanged += new System.EventHandler(this.cbDebug_CheckedChanged);
+            // 
+            // groupBasic
+            // 
+            this.groupBasic.Controls.Add(this.cbMoveScripts);
+            this.groupBasic.Location = new System.Drawing.Point(6, 6);
+            this.groupBasic.Name = "groupBasic";
+            this.groupBasic.Size = new System.Drawing.Size(211, 156);
+            this.groupBasic.TabIndex = 5;
+            this.groupBasic.TabStop = false;
+            this.groupBasic.Text = "Basics";
+            // 
+            // groupDebug
+            // 
+            this.groupDebug.Controls.Add(this.cbDebug);
+            this.groupDebug.Location = new System.Drawing.Point(314, 6);
+            this.groupDebug.Name = "groupDebug";
+            this.groupDebug.Size = new System.Drawing.Size(205, 156);
+            this.groupDebug.TabIndex = 6;
+            this.groupDebug.TabStop = false;
+            this.groupDebug.Text = "Debug";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(530, 396);
-            this.Controls.Add(this.grid_champions);
-            this.Controls.Add(this.cboChampionsList);
+            this.ClientSize = new System.Drawing.Size(551, 396);
+            this.Controls.Add(this.tabControl);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.grid_champions)).EndInit();
+            this.tabControl.ResumeLayout(false);
+            this.tabMain.ResumeLayout(false);
+            this.tabLogs.ResumeLayout(false);
+            this.tabLogs.PerformLayout();
+            this.tabSettings.ResumeLayout(false);
+            this.groupBasic.ResumeLayout(false);
+            this.groupBasic.PerformLayout();
+            this.groupDebug.ResumeLayout(false);
+            this.groupDebug.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -138,6 +264,15 @@
         private System.Windows.Forms.DataGridViewButtonColumn Download;
         private System.Windows.Forms.DataGridViewTextBoxColumn DownloadUrl;
         private System.Windows.Forms.OpenFileDialog openFileBol;
+        private System.Windows.Forms.TabControl tabControl;
+        private System.Windows.Forms.TabPage tabMain;
+        private System.Windows.Forms.TabPage tabLogs;
+        private System.Windows.Forms.TextBox tbLogs;
+        private System.Windows.Forms.TabPage tabSettings;
+        private System.Windows.Forms.CheckBox cbDebug;
+        private System.Windows.Forms.CheckBox cbMoveScripts;
+        private System.Windows.Forms.GroupBox groupDebug;
+        private System.Windows.Forms.GroupBox groupBasic;
     }
 }
 

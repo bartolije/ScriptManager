@@ -1,5 +1,4 @@
-﻿using MadMilkman.Ini;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,6 +13,8 @@ using Newtonsoft.Json;
 using MaterialSkin.Controls;
 using MaterialSkin;
 using System.Reflection;
+using SharpConfig;
+using System.Diagnostics;
 
 
 namespace Scriptmanager
@@ -21,11 +22,16 @@ namespace Scriptmanager
     public partial class Form1 : MaterialForm
     {
         const string INIFILE = "conf.ini";
+        const string BOLNAME = "BoL Studio.exe";
+        const string DLLNAME = "agent.dll";
 
         string apiSearchChampion = "http://www.bol-tools.com/api/search/champion/";
         string currentPath;
         string bolPath;
         Version version;
+
+        bool debug = true;
+        bool moveScript = true;
 
         public Form1()
         {
@@ -47,48 +53,80 @@ namespace Scriptmanager
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            tbLogs.Clear();
+
+            writeLog("Loaded on " + DateTime.Now.ToShortDateString());
+
             // get app path
             currentPath = Path.GetDirectoryName(Application.ExecutablePath);
+            writeLog("App path: " + currentPath);
 
             // check version for auto-update
             version = Assembly.GetEntryAssembly().GetName().Version;
+            writeLog("App version: " + version);
+
+            // check settings
+            debug = cbDebug.Checked;
             
-            // conf ifle
+            // conf file
+            // https://github.com/cemdervis/SharpConfig/blob/master/Example/Program.cs
+
+            #region Start and load ini file
+
             if (File.Exists(INIFILE))
             {
-                IniOptions options = new IniOptions();
-                IniFile file = new IniFile(options);
-                file.Load(@INIFILE);
-                
-                // Read file's content.
-                foreach (var section in file.Sections)
+                // test purpose
+                writeLog("Found ini file");
+                Configuration conf = Configuration.LoadFromFile(INIFILE);
+                bolPath = conf["Path"]["bolPath"].StringValue;
+                if ((File.Exists(bolPath + "/"+ BOLNAME) && File.Exists(bolPath + "/"+ DLLNAME))|| File.Exists(bolPath + "/agent.txt"))
                 {
-                    Console.WriteLine("SECTION: {0}", section.Name);
-                    foreach (var key in section.Keys)
-                        Console.WriteLine("KEY: {0}, VALUE: {1}", key.Name, key.Value);
+                    // ready to go
+                    writeLog("Found files, seems we are ready.");
                 }
-
-                bolPath = file.Sections["Path"].Keys["bolPath"].Value;
+                else
+                {
+                    writeLog("BoL Studio or agent.dll not found.");
+                    MessageBox.Show("Impossible to find folder. Error N07F01D3R.\n Application will now exit.", "An error occured");
+                    Application.Exit();
+                }
             }
             else
             {
-                IniFile file = new IniFile();
-                IniSection section = file.Sections.Add("Path");
-                section.TrailingComment.Text = "defaultPath";
+                // ask bolPath
+                writeLog("New start, searching BoL folder");
 
-                // Add new key and its value.
-                IniKey key = section.Keys.Add("bolPath", "");
-                file.Save("conf.ini");
-            }
+                openFileBol.Filter = "BoL Studio|*.exe|DLL Agent|*.dll|All file|*.*";
+                openFileBol.Title = "Please, select your BoL Studio exe or the agent.dll";
 
-            if(bolPath.Length < 2)
-            {
-                // bolPath not set, just search it / ask path to user
                 DialogResult result = openFileBol.ShowDialog();
+                if(result == DialogResult.OK)
+                {
+                    bolPath = Path.GetDirectoryName(openFileBol.FileName);
+
+                    if((File.Exists(bolPath + "/"+BOLNAME) && File.Exists(bolPath + "/"+DLLNAME)) || File.Exists(bolPath + "/agent.txt"))
+                    {
+                        // we got some good things
+                        Configuration conf = new Configuration();
+                        conf["Path"]["bolPath"].StringValue = bolPath;
+                        conf["constant"]["bolName"].StringValue = BOLNAME;
+                        conf["constant"]["dllName"].StringValue = DLLNAME;
+                        conf["debug"]["debug"].BoolValue = false;
+                        conf.SaveToFile(INIFILE);
+                    }
+                    else
+                    {
+                        writeLog("BoL Studio or agent.dll not found.");
+                        MessageBox.Show("Impossible to find folder. Error N07F01D3R.\n Application will now exit.", "An error occured");
+                        Application.Exit();
+                    }
+                }
             }
-            
+
+            #endregion
 
             // Go get all campions
+            writeLog("Loading champions for bol-tools API");
             var championsDataSource = new List<ComboBoxItem>();
             championsDataSource.Add(new ComboBoxItem("Select a champion", "-1"));
 
@@ -107,6 +145,12 @@ namespace Scriptmanager
         {
             grid_champions.Rows.Clear();
 
+            if (this.cboChampionsList.SelectedValue == "-1")
+            {
+                writeLog("Default value, wrong champion");
+                return;
+            }
+
             var selectedChampionkey = this.cboChampionsList.SelectedValue;
             var url = apiSearchChampion + selectedChampionkey;
 
@@ -120,20 +164,28 @@ namespace Scriptmanager
         private void grid_champions_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int cellIndex = e.ColumnIndex;
-            // cell[3] is download button
+            DataGridViewRow row = grid_champions.Rows[e.RowIndex];
+            if (cellIndex == 2)
+            {
+                writeLog("Click on link, open browser...");
+                string forumUrl = row.Cells[2].Value.ToString();
+                // TODO: check it cause it bugs 
+                Process.Start(forumUrl);
+            }
+
             if (cellIndex == 3)
             {
                 // TODO: Fix link (doesn't open browser to forum link)
                 // better get good script else drama will cum
-                DataGridViewRow row = grid_champions.Rows[e.RowIndex];
                 string downloadUrl = row.Cells[4].Value.ToString();
                 string scriptTitle = row.Cells[0].Value.ToString();
 
+                writeLog("Clicked button, downloading file");
                 using( var client = new WebClient())
                 {
                     client.DownloadFile(downloadUrl, scriptTitle+".lua");
                 }
-
+                writeLog("File Downloaded");
                 postDownload(scriptTitle + ".lua");
                 Console.WriteLine(downloadUrl);
             }
@@ -144,14 +196,21 @@ namespace Scriptmanager
         // after download, some check and move file to Script/ folder
         private void postDownload(string scriptFileName)
         {
-            try
+            if(moveScript)
             {
-                File.Move(scriptFileName, "/Scripts/"+ scriptFileName);
-            }catch(Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "error while moveFile");
+                try
+                {
+                    writeLog("Moving file");
+                    File.Move(scriptFileName, "/Scripts/" + scriptFileName);
+
+                }
+                catch (Exception ex)
+                {
+                    writeLog("Moving file failed.");
+                    writeLog(ex.ToString());
+                    MessageBox.Show("A wild error appear, I'm so scared. Error N01M0V310F01D3R.", "An error occured");
+                }
             }
-            
         }
 
         private List<Script> getScriptsListFromurl(string url)
@@ -192,6 +251,27 @@ namespace Scriptmanager
             return championList;
         }
 
+        private void writeLog(string messageLog, bool force = false)
+        {
+            if (!debug && !force) return;
+
+            tbLogs.Text += "[" + DateTime.Now.ToShortDateString() +"] ";
+            tbLogs.Text += messageLog;
+            tbLogs.Text += Environment.NewLine;
+        }
+
         #endregion
+
+        private void cbDebug_CheckedChanged(object sender, EventArgs e)
+        {
+            debug = cbDebug.Checked;
+            writeLog("Debug set to"+cbDebug.Checked.ToString(), true);
+        }
+
+        private void cbMoveScripts_CheckedChanged(object sender, EventArgs e)
+        {
+            moveScript = cbMoveScripts.Checked;
+            writeLog("Move Script set to" + cbMoveScripts.Checked.ToString(), true);
+        }
     }
 }
