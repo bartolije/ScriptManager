@@ -201,8 +201,16 @@ namespace Scriptmanager
                 try
                 {
                     writeLog("Moving file");
-                    File.Move(scriptFileName, "/Scripts/" + scriptFileName);
-
+                    string fromPath = Path.GetFullPath(scriptFileName);
+                    string toPath = Path.GetFullPath(bolPath+"/Scripts/"+ scriptFileName);
+                    writeLog("From: "+ fromPath);
+                    writeLog("To: "+ toPath);
+                    if(File.Exists(toPath))
+                    {
+                        writeLog("Script already exist, erase it.");
+                        File.Delete(toPath);
+                    }
+                    File.Move(fromPath, toPath);
                 }
                 catch (Exception ex)
                 {

@@ -38,20 +38,20 @@
             this.openFileBol = new System.Windows.Forms.OpenFileDialog();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabMain = new System.Windows.Forms.TabPage();
-            this.tabLogs = new System.Windows.Forms.TabPage();
-            this.tbLogs = new System.Windows.Forms.TextBox();
             this.tabSettings = new System.Windows.Forms.TabPage();
-            this.cbMoveScripts = new System.Windows.Forms.CheckBox();
+            this.groupDebug = new System.Windows.Forms.GroupBox();
             this.cbDebug = new System.Windows.Forms.CheckBox();
             this.groupBasic = new System.Windows.Forms.GroupBox();
-            this.groupDebug = new System.Windows.Forms.GroupBox();
+            this.cbMoveScripts = new System.Windows.Forms.CheckBox();
+            this.tabLogs = new System.Windows.Forms.TabPage();
+            this.tbLogs = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.grid_champions)).BeginInit();
             this.tabControl.SuspendLayout();
             this.tabMain.SuspendLayout();
-            this.tabLogs.SuspendLayout();
             this.tabSettings.SuspendLayout();
-            this.groupBasic.SuspendLayout();
             this.groupDebug.SuspendLayout();
+            this.groupBasic.SuspendLayout();
+            this.tabLogs.SuspendLayout();
             this.SuspendLayout();
             // 
             // cboChampionsList
@@ -69,6 +69,9 @@
             this.grid_champions.AllowUserToAddRows = false;
             this.grid_champions.AllowUserToDeleteRows = false;
             this.grid_champions.AllowUserToOrderColumns = true;
+            this.grid_champions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.grid_champions.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.grid_champions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grid_champions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -131,6 +134,9 @@
             // tabControl
             // 
             this.tabControl.AccessibleName = "Main";
+            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl.Controls.Add(this.tabMain);
             this.tabControl.Controls.Add(this.tabSettings);
             this.tabControl.Controls.Add(this.tabLogs);
@@ -152,26 +158,6 @@
             this.tabMain.Text = "Main";
             this.tabMain.UseVisualStyleBackColor = true;
             // 
-            // tabLogs
-            // 
-            this.tabLogs.Controls.Add(this.tbLogs);
-            this.tabLogs.Location = new System.Drawing.Point(4, 22);
-            this.tabLogs.Name = "tabLogs";
-            this.tabLogs.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLogs.Size = new System.Drawing.Size(519, 294);
-            this.tabLogs.TabIndex = 1;
-            this.tabLogs.Text = "Logs";
-            this.tabLogs.UseVisualStyleBackColor = true;
-            // 
-            // tbLogs
-            // 
-            this.tbLogs.Location = new System.Drawing.Point(6, 6);
-            this.tbLogs.Multiline = true;
-            this.tbLogs.Name = "tbLogs";
-            this.tbLogs.ReadOnly = true;
-            this.tbLogs.Size = new System.Drawing.Size(507, 282);
-            this.tbLogs.TabIndex = 0;
-            // 
             // tabSettings
             // 
             this.tabSettings.Controls.Add(this.groupDebug);
@@ -184,18 +170,16 @@
             this.tabSettings.Text = "Settings";
             this.tabSettings.UseVisualStyleBackColor = true;
             // 
-            // cbMoveScripts
+            // groupDebug
             // 
-            this.cbMoveScripts.AutoSize = true;
-            this.cbMoveScripts.Checked = true;
-            this.cbMoveScripts.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbMoveScripts.Location = new System.Drawing.Point(6, 19);
-            this.cbMoveScripts.Name = "cbMoveScripts";
-            this.cbMoveScripts.Size = new System.Drawing.Size(171, 17);
-            this.cbMoveScripts.TabIndex = 3;
-            this.cbMoveScripts.Text = "Move script when downloaded";
-            this.cbMoveScripts.UseVisualStyleBackColor = true;
-            this.cbMoveScripts.CheckedChanged += new System.EventHandler(this.cbMoveScripts_CheckedChanged);
+            this.groupDebug.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupDebug.Controls.Add(this.cbDebug);
+            this.groupDebug.Location = new System.Drawing.Point(314, 6);
+            this.groupDebug.Name = "groupDebug";
+            this.groupDebug.Size = new System.Drawing.Size(205, 156);
+            this.groupDebug.TabIndex = 6;
+            this.groupDebug.TabStop = false;
+            this.groupDebug.Text = "Debug";
             // 
             // cbDebug
             // 
@@ -221,15 +205,41 @@
             this.groupBasic.TabStop = false;
             this.groupBasic.Text = "Basics";
             // 
-            // groupDebug
+            // cbMoveScripts
             // 
-            this.groupDebug.Controls.Add(this.cbDebug);
-            this.groupDebug.Location = new System.Drawing.Point(314, 6);
-            this.groupDebug.Name = "groupDebug";
-            this.groupDebug.Size = new System.Drawing.Size(205, 156);
-            this.groupDebug.TabIndex = 6;
-            this.groupDebug.TabStop = false;
-            this.groupDebug.Text = "Debug";
+            this.cbMoveScripts.AutoSize = true;
+            this.cbMoveScripts.Checked = true;
+            this.cbMoveScripts.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbMoveScripts.Location = new System.Drawing.Point(6, 19);
+            this.cbMoveScripts.Name = "cbMoveScripts";
+            this.cbMoveScripts.Size = new System.Drawing.Size(171, 17);
+            this.cbMoveScripts.TabIndex = 3;
+            this.cbMoveScripts.Text = "Move script when downloaded";
+            this.cbMoveScripts.UseVisualStyleBackColor = true;
+            this.cbMoveScripts.CheckedChanged += new System.EventHandler(this.cbMoveScripts_CheckedChanged);
+            // 
+            // tabLogs
+            // 
+            this.tabLogs.Controls.Add(this.tbLogs);
+            this.tabLogs.Location = new System.Drawing.Point(4, 22);
+            this.tabLogs.Name = "tabLogs";
+            this.tabLogs.Padding = new System.Windows.Forms.Padding(3);
+            this.tabLogs.Size = new System.Drawing.Size(519, 294);
+            this.tabLogs.TabIndex = 1;
+            this.tabLogs.Text = "Logs";
+            this.tabLogs.UseVisualStyleBackColor = true;
+            // 
+            // tbLogs
+            // 
+            this.tbLogs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbLogs.Location = new System.Drawing.Point(6, 6);
+            this.tbLogs.Multiline = true;
+            this.tbLogs.Name = "tbLogs";
+            this.tbLogs.ReadOnly = true;
+            this.tbLogs.Size = new System.Drawing.Size(507, 282);
+            this.tbLogs.TabIndex = 0;
             // 
             // Form1
             // 
@@ -243,13 +253,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.grid_champions)).EndInit();
             this.tabControl.ResumeLayout(false);
             this.tabMain.ResumeLayout(false);
-            this.tabLogs.ResumeLayout(false);
-            this.tabLogs.PerformLayout();
             this.tabSettings.ResumeLayout(false);
-            this.groupBasic.ResumeLayout(false);
-            this.groupBasic.PerformLayout();
             this.groupDebug.ResumeLayout(false);
             this.groupDebug.PerformLayout();
+            this.groupBasic.ResumeLayout(false);
+            this.groupBasic.PerformLayout();
+            this.tabLogs.ResumeLayout(false);
+            this.tabLogs.PerformLayout();
             this.ResumeLayout(false);
 
         }
