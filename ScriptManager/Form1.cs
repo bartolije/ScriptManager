@@ -29,6 +29,7 @@ namespace ScriptManager
         const string DLLNAME = "agent.dll";
 
         string apiSearchChampion = "http://www.bol-tools.com/api/search/champion/";
+        string apiSearchCategory = "http://www.bol-tools.com/api/search/category/";
         string currentPath;
         string bolPath;
         Version version;
@@ -88,21 +89,8 @@ namespace ScriptManager
 
             #endregion
 
-            // Go get all campions
-            writeLog("Loading champions for bol-tools API");
-            var championsDataSource = new List<ComboBoxItem>();
-            championsDataSource.Add(new ComboBoxItem("Select a champion", "default"));
-
-            var champions = getChampionsListFromUrl("http://bol-tools.com/api/list/champions").OrderBy(c => c.Name);
-            foreach (var champion in champions)
-            {
-                championsDataSource.Add(new ComboBoxItem(champion.Name, champion.Key));
-            }
-                        
-            // set display & value, readonly
-            cboChampionsList.DataSource = championsDataSource;
-            cboChampionsList.DisplayMember = "Name";
-            cboChampionsList.ValueMember = "Value"; // Error here
+            fillChampionCombobox();
+            fillCategoryCombobox();
         }
 
         #region Private Custom Methods
@@ -299,6 +287,44 @@ namespace ScriptManager
             return CultureInfo.CurrentCulture.Name;
         }
 
+        private void fillChampionCombobox()
+        {
+            // ===--- Fill cbo champions ---===
+            // Go get all campions
+            writeLog("Loading champions for bol-tools API");
+            var championsDataSource = new List<ComboBoxItem>();
+            championsDataSource.Add(new ComboBoxItem("Select a champion", "default"));
+
+            var champions = getChampionsListFromUrl("http://bol-tools.com/api/list/champions").OrderBy(c => c.Name);
+            foreach (var champion in champions)
+            {
+                championsDataSource.Add(new ComboBoxItem(champion.Name, champion.Key));
+            }
+
+            // set display & value, readonly
+            cboChampionsList.DataSource = championsDataSource;
+            cboChampionsList.DisplayMember = "Name";
+            cboChampionsList.ValueMember = "Value";
+        }
+
+        private void fillCategoryCombobox()
+        {
+            // ===--- Fill cbo category ---===
+            // Go get all campions
+            writeLog("Loading category for bol-tools API");
+            var categoriesDataSource = new List<ComboBoxItem>();
+            categoriesDataSource.Add(new ComboBoxItem("Select a category", "default"));
+            categoriesDataSource.Add(new ComboBoxItem("OrbWalker", "orbwalk"));
+            categoriesDataSource.Add(new ComboBoxItem("Awareness", "awareness"));
+            categoriesDataSource.Add(new ComboBoxItem("Evade", "evade"));
+            categoriesDataSource.Add(new ComboBoxItem("Bots", "bot"));
+
+            // set display & value, readonly
+            cboCategoryList.DataSource = categoriesDataSource;
+            cboCategoryList.DisplayMember = "Name";
+            cboCategoryList.ValueMember = "Value";
+        }
+
         #endregion
 
         #region GUI events
@@ -315,6 +341,26 @@ namespace ScriptManager
 
             var selectedChampionkey = this.cboChampionsList.SelectedValue;
             var url = apiSearchChampion + selectedChampionkey;
+
+            var scriptsList = getScriptsListFromUrl(url);
+            foreach (var script in scriptsList)
+            {
+                grid_champions.Rows.Add(script.Title, script.Author, script.ForumUrl, "Download", script.UpdateUrl);
+            }
+        }
+
+        private void cboCategoryList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            grid_champions.Rows.Clear();
+
+            if (cboCategoryList.SelectedValue.ToString() == "default")
+            {
+                writeLog("Default value, wrong category");
+                return;
+            }
+
+            var selectedCategoryKey = cboCategoryList.SelectedValue;
+            var url = apiSearchCategory + selectedCategoryKey;
 
             var scriptsList = getScriptsListFromUrl(url);
             foreach (var script in scriptsList)
@@ -384,6 +430,7 @@ namespace ScriptManager
         }
 
         #endregion
+
 
 
         

@@ -38,6 +38,7 @@
             this.openFileBol = new System.Windows.Forms.OpenFileDialog();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabMain = new System.Windows.Forms.TabPage();
+            this.cboCategoryList = new System.Windows.Forms.ComboBox();
             this.tabSettings = new System.Windows.Forms.TabPage();
             this.groupDebug = new System.Windows.Forms.GroupBox();
             this.cbReplaceScript = new System.Windows.Forms.CheckBox();
@@ -48,6 +49,7 @@
             this.tbLogs = new System.Windows.Forms.TextBox();
             this.tabAbout = new System.Windows.Forms.TabPage();
             this.lAuthor = new System.Windows.Forms.Label();
+            this.cbAddAutoupdate = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.grid_champions)).BeginInit();
             this.tabControl.SuspendLayout();
             this.tabMain.SuspendLayout();
@@ -65,7 +67,7 @@
             this.cboChampionsList.Name = "cboChampionsList";
             this.cboChampionsList.Size = new System.Drawing.Size(121, 21);
             this.cboChampionsList.TabIndex = 0;
-            this.cboChampionsList.Text = "Select an champion";
+            this.cboChampionsList.Text = "Select a champion";
             this.cboChampionsList.SelectedIndexChanged += new System.EventHandler(this.cboChampionsList_SelectedIndexChanged);
             // 
             // grid_champions
@@ -87,7 +89,7 @@
             this.grid_champions.Location = new System.Drawing.Point(6, 57);
             this.grid_champions.Name = "grid_champions";
             this.grid_champions.ReadOnly = true;
-            this.grid_champions.Size = new System.Drawing.Size(508, 231);
+            this.grid_champions.Size = new System.Drawing.Size(503, 338);
             this.grid_champions.TabIndex = 1;
             this.grid_champions.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grid_champions_CellClick);
             // 
@@ -148,20 +150,31 @@
             this.tabControl.Location = new System.Drawing.Point(12, 64);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(527, 320);
+            this.tabControl.Size = new System.Drawing.Size(522, 427);
             this.tabControl.TabIndex = 2;
             // 
             // tabMain
             // 
+            this.tabMain.Controls.Add(this.cboCategoryList);
             this.tabMain.Controls.Add(this.grid_champions);
             this.tabMain.Controls.Add(this.cboChampionsList);
             this.tabMain.Location = new System.Drawing.Point(4, 22);
             this.tabMain.Name = "tabMain";
             this.tabMain.Padding = new System.Windows.Forms.Padding(3);
-            this.tabMain.Size = new System.Drawing.Size(519, 294);
+            this.tabMain.Size = new System.Drawing.Size(514, 401);
             this.tabMain.TabIndex = 0;
             this.tabMain.Text = "Main";
             this.tabMain.UseVisualStyleBackColor = true;
+            // 
+            // cboCategoryList
+            // 
+            this.cboCategoryList.FormattingEnabled = true;
+            this.cboCategoryList.Location = new System.Drawing.Point(6, 33);
+            this.cboCategoryList.Name = "cboCategoryList";
+            this.cboCategoryList.Size = new System.Drawing.Size(121, 21);
+            this.cboCategoryList.TabIndex = 2;
+            this.cboCategoryList.Text = "Select a category";
+            this.cboCategoryList.SelectedIndexChanged += new System.EventHandler(this.cboCategoryList_SelectedIndexChanged);
             // 
             // tabSettings
             // 
@@ -170,7 +183,7 @@
             this.tabSettings.Location = new System.Drawing.Point(4, 22);
             this.tabSettings.Name = "tabSettings";
             this.tabSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSettings.Size = new System.Drawing.Size(519, 294);
+            this.tabSettings.Size = new System.Drawing.Size(514, 401);
             this.tabSettings.TabIndex = 2;
             this.tabSettings.Text = "Settings";
             this.tabSettings.UseVisualStyleBackColor = true;
@@ -180,7 +193,7 @@
             this.groupDebug.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.groupDebug.Controls.Add(this.cbReplaceScript);
             this.groupDebug.Controls.Add(this.cbDebug);
-            this.groupDebug.Location = new System.Drawing.Point(308, 6);
+            this.groupDebug.Location = new System.Drawing.Point(303, 6);
             this.groupDebug.Name = "groupDebug";
             this.groupDebug.Size = new System.Drawing.Size(205, 156);
             this.groupDebug.TabIndex = 6;
@@ -217,6 +230,7 @@
             // 
             // groupBasic
             // 
+            this.groupBasic.Controls.Add(this.cbAddAutoupdate);
             this.groupBasic.Controls.Add(this.cbMoveScripts);
             this.groupBasic.Location = new System.Drawing.Point(6, 6);
             this.groupBasic.Name = "groupBasic";
@@ -282,11 +296,23 @@
             this.lAuthor.TabIndex = 0;
             this.lAuthor.Text = "FreakyBart";
             // 
+            // cbAddAutoupdate
+            // 
+            this.cbAddAutoupdate.AutoSize = true;
+            this.cbAddAutoupdate.Checked = true;
+            this.cbAddAutoupdate.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbAddAutoupdate.Location = new System.Drawing.Point(6, 42);
+            this.cbAddAutoupdate.Name = "cbAddAutoupdate";
+            this.cbAddAutoupdate.Size = new System.Drawing.Size(114, 17);
+            this.cbAddAutoupdate.TabIndex = 4;
+            this.cbAddAutoupdate.Text = "Add to autoupdate";
+            this.cbAddAutoupdate.UseVisualStyleBackColor = true;
+            // 
             // ScriptManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(551, 396);
+            this.ClientSize = new System.Drawing.Size(546, 503);
             this.Controls.Add(this.tabControl);
             this.Name = "ScriptManagerForm";
             this.Text = "Script Manager";
@@ -331,6 +357,8 @@
         private System.Windows.Forms.CheckBox cbReplaceScript;
         private System.Windows.Forms.TabPage tabAbout;
         private System.Windows.Forms.Label lAuthor;
+        private System.Windows.Forms.ComboBox cboCategoryList;
+        private System.Windows.Forms.CheckBox cbAddAutoupdate;
     }
 }
 
