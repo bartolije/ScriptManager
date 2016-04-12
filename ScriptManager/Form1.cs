@@ -93,11 +93,12 @@ namespace ScriptManager
             var championsDataSource = new List<ComboBoxItem>();
             championsDataSource.Add(new ComboBoxItem("Select a champion", "default"));
 
-            championsDataSource.Add(new ComboBoxItem("Garen", "MonkeyKing"));
-            championsDataSource.Add(new ComboBoxItem("Taric", "Taric"));
-            championsDataSource.Add(new ComboBoxItem("Wukong", "Garen"));
-
-            
+            var champions = getChampionsListFromUrl("http://bol-tools.com/api/list/champions").OrderBy(c => c.Name);
+            foreach (var champion in champions)
+            {
+                championsDataSource.Add(new ComboBoxItem(champion.Name, champion.Key));
+            }
+                        
             // set display & value, readonly
             cboChampionsList.DataSource = championsDataSource;
             cboChampionsList.DisplayMember = "Name";
@@ -158,9 +159,9 @@ namespace ScriptManager
             return scriptList;
         }
 
-        private static List<Script> getChampionsListFromUrl(string url)
+        private static List<Champion> getChampionsListFromUrl(string url)
         {
-            var championList = new List<Script>();
+            var championList = new List<Champion>();
 
             using (WebClient wc = new WebClient())
             {
@@ -170,7 +171,7 @@ namespace ScriptManager
                 foreach (var champ in stuff)
                 {
                     // title, author, forum, download
-                    Script scriptObject = JsonConvert.DeserializeObject<Champion>(champ.ToString());
+                    Champion scriptObject = JsonConvert.DeserializeObject<Champion>(champ.ToString());
                     championList.Add(scriptObject);
                 }
             }
@@ -255,8 +256,8 @@ namespace ScriptManager
                 writeLog("Load settings from config.");
                 try
                 {
-                    replaceScript = Convert.ToBoolean(conf["Settings"]["replace"].StringValue);
-                    moveScript = Convert.ToBoolean(conf["Settings"]["move"].StringValue);
+                    replaceScript = conf["Settings"]["replace"].BoolValue;
+                    moveScript = conf["Settings"]["move"].BoolValue;
                 }
                 catch(Exception ex)
                 {
@@ -326,7 +327,7 @@ namespace ScriptManager
         {
             int cellIndex = e.ColumnIndex;
             DataGridViewRow row = grid_champions.Rows[e.RowIndex];
-            if (cellIndex == 2)
+            if (cellIndex == 21)
             {
                 writeLog("Click on link, open browser...");
                 string forumUrl = row.Cells[2].Value.ToString();
