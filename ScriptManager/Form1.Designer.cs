@@ -38,6 +38,9 @@
             this.openFileBol = new System.Windows.Forms.OpenFileDialog();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabMain = new System.Windows.Forms.TabPage();
+            this.lDownloadDetails = new System.Windows.Forms.Label();
+            this.lDownload = new System.Windows.Forms.Label();
+            this.downloadBar = new System.Windows.Forms.ProgressBar();
             this.cboCategoryList = new System.Windows.Forms.ComboBox();
             this.tabSettings = new System.Windows.Forms.TabPage();
             this.groupDebug = new System.Windows.Forms.GroupBox();
@@ -50,9 +53,6 @@
             this.tbLogs = new System.Windows.Forms.TextBox();
             this.tabAbout = new System.Windows.Forms.TabPage();
             this.lAuthor = new System.Windows.Forms.Label();
-            this.downloadBar = new System.Windows.Forms.ProgressBar();
-            this.lDownload = new System.Windows.Forms.Label();
-            this.lDownloadDetails = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.grid_champions)).BeginInit();
             this.tabControl.SuspendLayout();
             this.tabMain.SuspendLayout();
@@ -65,6 +65,8 @@
             // 
             // cboChampionsList
             // 
+            this.cboChampionsList.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cboChampionsList.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboChampionsList.FormattingEnabled = true;
             this.cboChampionsList.Location = new System.Drawing.Point(6, 6);
             this.cboChampionsList.Name = "cboChampionsList";
@@ -172,8 +174,35 @@
             this.tabMain.Text = "Main";
             this.tabMain.UseVisualStyleBackColor = true;
             // 
+            // lDownloadDetails
+            // 
+            this.lDownloadDetails.AutoSize = true;
+            this.lDownloadDetails.Location = new System.Drawing.Point(278, 32);
+            this.lDownloadDetails.Name = "lDownloadDetails";
+            this.lDownloadDetails.Size = new System.Drawing.Size(85, 13);
+            this.lDownloadDetails.TabIndex = 5;
+            this.lDownloadDetails.Text = "downloadDetails";
+            // 
+            // lDownload
+            // 
+            this.lDownload.AutoSize = true;
+            this.lDownload.Location = new System.Drawing.Point(192, 11);
+            this.lDownload.Name = "lDownload";
+            this.lDownload.Size = new System.Drawing.Size(84, 13);
+            this.lDownload.TabIndex = 4;
+            this.lDownload.Text = "Download statut";
+            // 
+            // downloadBar
+            // 
+            this.downloadBar.Location = new System.Drawing.Point(281, 6);
+            this.downloadBar.Name = "downloadBar";
+            this.downloadBar.Size = new System.Drawing.Size(227, 23);
+            this.downloadBar.TabIndex = 3;
+            // 
             // cboCategoryList
             // 
+            this.cboCategoryList.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cboCategoryList.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboCategoryList.FormattingEnabled = true;
             this.cboCategoryList.Location = new System.Drawing.Point(6, 33);
             this.cboCategoryList.Name = "cboCategoryList";
@@ -313,31 +342,6 @@
             this.lAuthor.Size = new System.Drawing.Size(214, 46);
             this.lAuthor.TabIndex = 0;
             this.lAuthor.Text = "FreakyBart";
-            // 
-            // downloadBar
-            // 
-            this.downloadBar.Location = new System.Drawing.Point(281, 6);
-            this.downloadBar.Name = "downloadBar";
-            this.downloadBar.Size = new System.Drawing.Size(227, 23);
-            this.downloadBar.TabIndex = 3;
-            // 
-            // lDownload
-            // 
-            this.lDownload.AutoSize = true;
-            this.lDownload.Location = new System.Drawing.Point(192, 11);
-            this.lDownload.Name = "lDownload";
-            this.lDownload.Size = new System.Drawing.Size(84, 13);
-            this.lDownload.TabIndex = 4;
-            this.lDownload.Text = "Download statut";
-            // 
-            // lDownloadDetails
-            // 
-            this.lDownloadDetails.AutoSize = true;
-            this.lDownloadDetails.Location = new System.Drawing.Point(278, 32);
-            this.lDownloadDetails.Name = "lDownloadDetails";
-            this.lDownloadDetails.Size = new System.Drawing.Size(85, 13);
-            this.lDownloadDetails.TabIndex = 5;
-            this.lDownloadDetails.Text = "downloadDetails";
             // 
             // ScriptManagerForm
             // 
