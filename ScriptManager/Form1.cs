@@ -38,6 +38,8 @@ namespace ScriptManager
         bool moveScript = true;
         bool replaceScript = true;
 
+        Stopwatch sw = new Stopwatch();
+
         public ScriptManagerForm()
         {
             InitializeComponent();
@@ -112,7 +114,9 @@ namespace ScriptManager
                         writeLog("Script already exist, erase it.");
                         if(!replaceScript)
                         {
+                            MessageBox.Show("Script already exist, but you unticked replace option.\n Abort operation.", "An error occured");
                             writeLog("Nope. User doesn't want. Abort.");
+                            File.Delete(fromPath);
                             return;
                         }
                         File.Delete(toPath);
@@ -228,6 +232,8 @@ namespace ScriptManager
             conf["Constant"]["bolName"].StringValue = BOLNAME;
             conf["Constant"]["dllName"].StringValue = DLLNAME;
             conf["Debug"]["debug"].BoolValue = true;
+            Section section = new Section("Scripts");
+            conf.Add(section);
             conf.SaveToFile(INIFILE);
         }
 
@@ -388,12 +394,44 @@ namespace ScriptManager
                 string scriptTitle = row.Cells[0].Value.ToString();
 
                 writeLog("Clicked button, downloading file");
+
+                Uri url = downloadUrl.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ? new Uri(downloadUrl) : new Uri("http://" + downloadUrl);
+                writeLog("download from url: " + url.ToString());
+
+                sw.Start();
+
                 using (var client = new WebClient())
                 {
-                    client.DownloadFile(downloadUrl, scriptTitle + ".lua");
+                    client.DownloadFileCompleted += new AsyncCompletedEventHandler(downloadComplet);
+                    client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloadProgress);
+                    lDownload.Text = "Downloading...";
+                    client.DownloadFileAsync(url, scriptTitle + ".lua");
                 }
                 writeLog("File Downloaded");
                 postDownload(scriptTitle + ".lua");
+            }
+        }
+
+        private void downloadProgress(object sender, DownloadProgressChangedEventArgs e)
+        {
+            downloadBar.Value = e.ProgressPercentage;
+
+            string speed = string.Format("{0} kb/s", (e.BytesReceived / 1024d / sw.Elapsed.TotalSeconds).ToString("0.00"));
+            string perc = e.ProgressPercentage.ToString() + "%";
+            lDownloadDetails.Text = string.Format("[{0}] {1} Kb's / {2} Kb's - {3}", perc, (e.BytesReceived/1024d).ToString("0.00"), (e.TotalBytesToReceive/1024d).ToString("0.00"), speed);
+        }
+
+        private void downloadComplet(object sender, AsyncCompletedEventArgs e)
+        {
+            sw.Reset();
+            if (e.Cancelled)
+            {
+                // download cancel
+            }
+            else
+            {
+                // download complet
+                lDownloadDetails.Text = "Download complete";
             }
         }
 

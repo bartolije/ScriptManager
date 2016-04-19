@@ -44,12 +44,15 @@
             this.cbReplaceScript = new System.Windows.Forms.CheckBox();
             this.cbDebug = new System.Windows.Forms.CheckBox();
             this.groupBasic = new System.Windows.Forms.GroupBox();
+            this.cbAddAutoupdate = new System.Windows.Forms.CheckBox();
             this.cbMoveScripts = new System.Windows.Forms.CheckBox();
             this.tabLogs = new System.Windows.Forms.TabPage();
             this.tbLogs = new System.Windows.Forms.TextBox();
             this.tabAbout = new System.Windows.Forms.TabPage();
             this.lAuthor = new System.Windows.Forms.Label();
-            this.cbAddAutoupdate = new System.Windows.Forms.CheckBox();
+            this.downloadBar = new System.Windows.Forms.ProgressBar();
+            this.lDownload = new System.Windows.Forms.Label();
+            this.lDownloadDetails = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.grid_champions)).BeginInit();
             this.tabControl.SuspendLayout();
             this.tabMain.SuspendLayout();
@@ -155,6 +158,9 @@
             // 
             // tabMain
             // 
+            this.tabMain.Controls.Add(this.lDownloadDetails);
+            this.tabMain.Controls.Add(this.lDownload);
+            this.tabMain.Controls.Add(this.downloadBar);
             this.tabMain.Controls.Add(this.cboCategoryList);
             this.tabMain.Controls.Add(this.grid_champions);
             this.tabMain.Controls.Add(this.cboChampionsList);
@@ -239,6 +245,18 @@
             this.groupBasic.TabStop = false;
             this.groupBasic.Text = "Basics";
             // 
+            // cbAddAutoupdate
+            // 
+            this.cbAddAutoupdate.AutoSize = true;
+            this.cbAddAutoupdate.Checked = true;
+            this.cbAddAutoupdate.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbAddAutoupdate.Location = new System.Drawing.Point(6, 42);
+            this.cbAddAutoupdate.Name = "cbAddAutoupdate";
+            this.cbAddAutoupdate.Size = new System.Drawing.Size(114, 17);
+            this.cbAddAutoupdate.TabIndex = 4;
+            this.cbAddAutoupdate.Text = "Add to autoupdate";
+            this.cbAddAutoupdate.UseVisualStyleBackColor = true;
+            // 
             // cbMoveScripts
             // 
             this.cbMoveScripts.AutoSize = true;
@@ -259,7 +277,7 @@
             this.tabLogs.Location = new System.Drawing.Point(4, 22);
             this.tabLogs.Name = "tabLogs";
             this.tabLogs.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLogs.Size = new System.Drawing.Size(519, 294);
+            this.tabLogs.Size = new System.Drawing.Size(514, 401);
             this.tabLogs.TabIndex = 1;
             this.tabLogs.Text = "Logs";
             this.tabLogs.UseVisualStyleBackColor = true;
@@ -281,7 +299,7 @@
             this.tabAbout.Controls.Add(this.lAuthor);
             this.tabAbout.Location = new System.Drawing.Point(4, 22);
             this.tabAbout.Name = "tabAbout";
-            this.tabAbout.Size = new System.Drawing.Size(519, 294);
+            this.tabAbout.Size = new System.Drawing.Size(514, 401);
             this.tabAbout.TabIndex = 3;
             this.tabAbout.Text = "About";
             this.tabAbout.UseVisualStyleBackColor = true;
@@ -296,17 +314,30 @@
             this.lAuthor.TabIndex = 0;
             this.lAuthor.Text = "FreakyBart";
             // 
-            // cbAddAutoupdate
+            // downloadBar
             // 
-            this.cbAddAutoupdate.AutoSize = true;
-            this.cbAddAutoupdate.Checked = true;
-            this.cbAddAutoupdate.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbAddAutoupdate.Location = new System.Drawing.Point(6, 42);
-            this.cbAddAutoupdate.Name = "cbAddAutoupdate";
-            this.cbAddAutoupdate.Size = new System.Drawing.Size(114, 17);
-            this.cbAddAutoupdate.TabIndex = 4;
-            this.cbAddAutoupdate.Text = "Add to autoupdate";
-            this.cbAddAutoupdate.UseVisualStyleBackColor = true;
+            this.downloadBar.Location = new System.Drawing.Point(281, 6);
+            this.downloadBar.Name = "downloadBar";
+            this.downloadBar.Size = new System.Drawing.Size(227, 23);
+            this.downloadBar.TabIndex = 3;
+            // 
+            // lDownload
+            // 
+            this.lDownload.AutoSize = true;
+            this.lDownload.Location = new System.Drawing.Point(192, 11);
+            this.lDownload.Name = "lDownload";
+            this.lDownload.Size = new System.Drawing.Size(84, 13);
+            this.lDownload.TabIndex = 4;
+            this.lDownload.Text = "Download statut";
+            // 
+            // lDownloadDetails
+            // 
+            this.lDownloadDetails.AutoSize = true;
+            this.lDownloadDetails.Location = new System.Drawing.Point(278, 32);
+            this.lDownloadDetails.Name = "lDownloadDetails";
+            this.lDownloadDetails.Size = new System.Drawing.Size(85, 13);
+            this.lDownloadDetails.TabIndex = 5;
+            this.lDownloadDetails.Text = "downloadDetails";
             // 
             // ScriptManagerForm
             // 
@@ -322,6 +353,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.grid_champions)).EndInit();
             this.tabControl.ResumeLayout(false);
             this.tabMain.ResumeLayout(false);
+            this.tabMain.PerformLayout();
             this.tabSettings.ResumeLayout(false);
             this.groupDebug.ResumeLayout(false);
             this.groupDebug.PerformLayout();
@@ -359,6 +391,9 @@
         private System.Windows.Forms.Label lAuthor;
         private System.Windows.Forms.ComboBox cboCategoryList;
         private System.Windows.Forms.CheckBox cbAddAutoupdate;
+        private System.Windows.Forms.ProgressBar downloadBar;
+        private System.Windows.Forms.Label lDownload;
+        private System.Windows.Forms.Label lDownloadDetails;
     }
 }
 
