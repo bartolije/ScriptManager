@@ -16,6 +16,7 @@ using System.Reflection;
 using SharpConfig;
 using System.Diagnostics;
 using System.Globalization;
+using Microsoft.Win32;
 
 
 namespace ScriptManager
@@ -30,6 +31,7 @@ namespace ScriptManager
 
         string apiSearchChampion = "http://www.bol-tools.com/api/search/champion/";
         string apiSearchCategory = "http://www.bol-tools.com/api/search/category/";
+        string onlineVersionUrl = "https://raw.githubusercontent.com/bartolije/version/master/lazytool.txt";
         string currentPath;
         string bolPath;
         Version version;
@@ -64,7 +66,17 @@ namespace ScriptManager
 
             // check version for auto-update
             version = Assembly.GetEntryAssembly().GetName().Version;
+            Version onlineVersion = getLatestVersion();
+
             writeLog("App version: " + version);
+            writeLog("Online version: " + onlineVersion);
+            if(version != onlineVersion)
+            {
+                MessageBox.Show("A new version is available online.\nTo avoig bugs or disfunctions, please, download it.\n\n Application will now exit.", "A new version is available");
+                System.Diagnostics.Process.Start("http://www.forum.botoflegends.com/topic/94198-");
+                writeLog("new version available: Exit");
+                Application.Exit();
+            }
 
             // check settings ==> Default
             debug = cbDebug.Checked;
@@ -123,11 +135,10 @@ namespace ScriptManager
                     }
                     File.Move(fromPath, toPath);
                 }
-                catch (Exception ex)
+                catch
                 {
                     writeLog("Moving file failed.");
-                    writeLog(ex.ToString());
-                    MessageBox.Show("Impossible to move file.\n. Error N01M0V310F01D3R.", "An error occured");
+                    MessageBox.Show("Impossible to move file.", "An error occured");
                 }
             }
         }
@@ -174,7 +185,7 @@ namespace ScriptManager
         {
             if (!debug && !force) return;
 
-            tbLogs.Text += "[" + DateTime.Now.ToShortDateString() +"] ";
+            tbLogs.Text += "[" + DateTime.Now +"] ";
             tbLogs.Text += messageLog;
             tbLogs.Text += Environment.NewLine;
         }
@@ -213,8 +224,8 @@ namespace ScriptManager
                     }
                     else
                     {
-                        writeLog("BoL Studio or agent.dll not found.");
-                        MessageBox.Show("Impossible to find folder.\nError N07F01D3R.", "An error occured");
+                        writeLog("BoL Studio or agent.dll not found. Error N07F01D3R.");
+                        MessageBox.Show("Impossible to find folder.", "An error occured");
                     }
                 }else {
                     writeLog("User cancelled file pick.");
@@ -256,13 +267,13 @@ namespace ScriptManager
                 catch(Exception ex)
                 {
                     writeLog("fail load settings.");
-                    MessageBox.Show("Impossible to load settings.\nError L04DF411. ", "An error occured");
+                    MessageBox.Show("Impossible to load settings. ", "An error occured");
                 }
             }
             else
             {
                 writeLog("BoL Studio or agent.dll not found.");
-                MessageBox.Show("Impossible to find folder.\nError N07F01D3R.", "An error occured");
+                MessageBox.Show("Impossible to find folder.", "An error occured");
                 getBolPathFolder();
             }
         }
@@ -331,6 +342,61 @@ namespace ScriptManager
             cboCategoryList.ValueMember = "Value";
         }
 
+        private Version getLatestVersion()
+        {
+            Version onlineVersion;
+
+            using(WebClient wc = new WebClient())
+            {
+                string ver = wc.DownloadString(onlineVersionUrl);
+                onlineVersion = new Version(ver);
+            }
+            return onlineVersion;
+        }
+
+        private static string getBrowserPath()
+        {
+            string browser = string.Empty;
+            RegistryKey key = null;
+
+            try
+            {
+
+                key = Registry.CurrentUser.OpenSubKey(@"HTTP\shell\open\command", false);
+
+                if (key == null)
+                {
+                    key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http", false);
+                }
+
+                if (key != null)
+                {
+                    browser = key.GetValue(null).ToString().ToLower().Replace("\"", "");
+                    if(!browser.EndsWith("exe"))
+                    {
+                        browser = browser.Substring(0, browser.LastIndexOf(".exe") + 4);
+                    }
+                    key.Close();
+                }
+                
+            }catch
+            {
+                return string.Empty;
+            }
+            return browser;
+        }
+
+        private static void startBrower(string url)
+        {
+            string browerPath = getBrowserPath();
+            if (browerPath == string.Empty) browerPath = "iexplore";
+
+            Process process = new Process();
+            process.StartInfo = new ProcessStartInfo(browerPath);
+            process.StartInfo.Arguments = "\"" + url + "\"";
+            process.Start();
+        }
+
         #endregion
 
         #region GUI events
@@ -379,12 +445,12 @@ namespace ScriptManager
         {
             int cellIndex = e.ColumnIndex;
             DataGridViewRow row = grid_champions.Rows[e.RowIndex];
-            if (cellIndex == 21)
+            if (cellIndex == 2)
             {
                 writeLog("Click on link, open browser...");
                 string forumUrl = row.Cells[2].Value.ToString();
-                // TODO: check it cause it bugs 
-                Process.Start(forumUrl);
+                // TODO: wrong value here
+                //startBrower(forumUrl);
             }
 
             if (cellIndex == 3)
@@ -427,10 +493,12 @@ namespace ScriptManager
             if (e.Cancelled)
             {
                 // download cancel
+                writeLog("download cancelled");
             }
             else
             {
                 // download complet
+                writeLog("download complete");
                 lDownloadDetails.Text = "Download complete";
             }
         }
@@ -468,9 +536,6 @@ namespace ScriptManager
         }
 
         #endregion
-<<<<<<< HEAD
-=======
-        
->>>>>>> 2fde0b9b5e09dc15a4d62e00aaebc3655e99dd75
+
     }
 }
