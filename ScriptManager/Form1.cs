@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -34,6 +33,7 @@ namespace ScriptManager
         string onlineVersionUrl = "https://raw.githubusercontent.com/bartolije/version/master/lazytool.txt";
         string currentPath;
         string bolPath;
+        string downloadFileName;
         Version version;
 
         bool debug = true;
@@ -417,7 +417,7 @@ namespace ScriptManager
             var scriptsList = getScriptsListFromUrl(url);
             foreach (var script in scriptsList)
             {
-                grid_champions.Rows.Add(script.Title, script.Author, script.ForumUrl, "Download", script.UpdateUrl);
+                grid_champions.Rows.Add(script.Title, script.IsPaid, script.Author, script.ForumUrl, "Download", script.UpdateUrl);
             }
         }
 
@@ -445,18 +445,18 @@ namespace ScriptManager
         {
             int cellIndex = e.ColumnIndex;
             DataGridViewRow row = grid_champions.Rows[e.RowIndex];
-            if (cellIndex == 2)
-            {
-                writeLog("Click on link, open browser...");
-                string forumUrl = row.Cells[2].Value.ToString();
-                // TODO: wrong value here
-                //startBrower(forumUrl);
-            }
-
             if (cellIndex == 3)
             {
+                writeLog("Click on link, open browser...");
+                string forumUrl = row.Cells[3].Value.ToString();
+                // TODO: wrong value here
+                startBrower(forumUrl);
+            }
+
+            if (cellIndex == 4)
+            {
                 // better get good script else drama will cum
-                string downloadUrl = row.Cells[4].Value.ToString();
+                string downloadUrl = row.Cells[5].Value.ToString();
                 string scriptTitle = row.Cells[0].Value.ToString();
 
                 writeLog("Clicked button, downloading file");
@@ -471,10 +471,9 @@ namespace ScriptManager
                     client.DownloadFileCompleted += new AsyncCompletedEventHandler(downloadComplet);
                     client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloadProgress);
                     lDownload.Text = "Downloading...";
-                    client.DownloadFileAsync(url, scriptTitle + ".lua");
+                    downloadFileName = scriptTitle + ".lua";
+                    client.DownloadFileAsync(url, downloadFileName);
                 }
-                writeLog("File Downloaded");
-                postDownload(scriptTitle + ".lua");
             }
         }
 
@@ -500,6 +499,10 @@ namespace ScriptManager
                 // download complet
                 writeLog("download complete");
                 lDownloadDetails.Text = "Download complete";
+
+                // Moved here cause we need end download
+                writeLog("File Downloaded");
+                postDownload(downloadFileName);
             }
         }
 
