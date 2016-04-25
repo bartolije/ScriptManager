@@ -70,7 +70,7 @@ namespace ScriptManager
 
             writeLog("App version: " + version);
             writeLog("Online version: " + onlineVersion);
-            if(version != onlineVersion)
+            if(version < onlineVersion)
             {
                 MessageBox.Show("A new version is available online.\nTo avoig bugs or disfunctions, please, download it.\n\n Application will now exit.", "A new version is available");
                 System.Diagnostics.Process.Start("http://www.forum.botoflegends.com/topic/94198-");
@@ -264,7 +264,7 @@ namespace ScriptManager
                     replaceScript = conf["Settings"]["replace"].BoolValue;
                     moveScript = conf["Settings"]["move"].BoolValue;
                 }
-                catch(Exception ex)
+                catch
                 {
                     writeLog("fail load settings.");
                     MessageBox.Show("Impossible to load settings. ", "An error occured");
@@ -437,7 +437,7 @@ namespace ScriptManager
             var scriptsList = getScriptsListFromUrl(url);
             foreach (var script in scriptsList)
             {
-                grid_champions.Rows.Add(script.Title, script.Author, script.ForumUrl, "Download", script.UpdateUrl);
+                grid_champions.Rows.Add(script.Title, script.IsPaid, script.Author, script.ForumUrl, "Download", script.UpdateUrl);
             }
         }
 
@@ -461,7 +461,7 @@ namespace ScriptManager
 
                 writeLog("Clicked button, downloading file");
 
-                Uri url = downloadUrl.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ? new Uri(downloadUrl) : new Uri("http://" + downloadUrl);
+                Uri url = new Uri(downloadUrl);
                 writeLog("download from url: " + url.ToString());
 
                 sw.Start();
