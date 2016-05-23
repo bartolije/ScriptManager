@@ -16,6 +16,7 @@ using SharpConfig;
 using System.Diagnostics;
 using System.Globalization;
 using Microsoft.Win32;
+using System.Threading;
 
 
 namespace ScriptManager
@@ -39,6 +40,7 @@ namespace ScriptManager
         bool debug = true;
         bool moveScript = true;
         bool replaceScript = true;
+        string culture = getCurrentCulture();
 
         Stopwatch sw = new Stopwatch();
 
@@ -73,8 +75,8 @@ namespace ScriptManager
             if(version < onlineVersion)
             {
                 MessageBox.Show("A new version is available online.\nTo avoig bugs or disfunctions, please, download it.\n\n Application will now exit.", "A new version is available");
-                System.Diagnostics.Process.Start("http://www.forum.botoflegends.com/topic/94198-");
                 writeLog("new version available: Exit");
+                System.Diagnostics.Process.Start("http://www.forum.botoflegends.com/topic/94198-");
                 Application.Exit();
             }
 
@@ -105,6 +107,8 @@ namespace ScriptManager
 
             fillChampionCombobox();
             fillCategoryCombobox();
+            //fillLanguageCombobox();
+            fillListScripts();
         }
 
         #region Private Custom Methods
@@ -140,6 +144,67 @@ namespace ScriptManager
                     writeLog("Moving file failed.");
                     MessageBox.Show("Impossible to move file.", "An error occured");
                 }
+            }
+        }
+
+        private void fillListScripts()
+        {
+            // Fill list from /Scripts folder
+            foreach (var script in getScriptsInFolder(Path.GetFullPath(bolPath + "/Scripts")))
+            {
+                listScriptsLoaded.Items.Add(Path.GetFileName(script.ToString()));
+            }
+
+            // Fill list from /NotScripts folder
+            if (!Directory.Exists(Path.GetFullPath(bolPath + "/NotScripts")))
+            {
+                Directory.CreateDirectory(Path.GetFullPath(bolPath + "/NotScripts"));
+                writeLog("created NotScripts dir");
+            }
+            foreach (var script in getScriptsInFolder(Path.GetFullPath(bolPath + "/NotScripts")))
+            {
+                listScriptsNotLoaded.Items.Add(Path.GetFileName(script.ToString()));
+            }
+        }
+
+        private List<string> getScriptsInFolder(string folderPath)
+        {
+            writeLog("get scripts folder => " + folderPath);
+            List<string> scriptList = new List<string>();
+
+            string[] files = Directory.GetFiles(folderPath, "*.lua");
+            foreach(var file in files)
+            {
+                scriptList.Add(file);
+            }
+            return scriptList;
+        }
+
+        private void moveFile(string fromPath, string toPath)
+        {
+            try
+            {
+                writeLog("moveFile trigger");
+                writeLog("From: " + fromPath);
+                writeLog("To: " + toPath);
+                if (File.Exists(toPath))
+                {
+                    writeLog("Script already exist, erase it.");
+                    if (!replaceScript)
+                    {
+                        MessageBox.Show("Script already exist, but you unticked replace option.\n Abort operation.", "An error occured");
+                        writeLog("Nope. User doesn't want. Abort.");
+                        File.Delete(fromPath);
+                        return;
+                    }
+                    File.Delete(toPath);
+                }
+                File.Move(fromPath, toPath);
+            }
+            catch
+            {
+                writeLog("Moving file failed.");
+                MessageBox.Show("Impossible to move file.", "An error occured");
             }
         }
 
@@ -240,6 +305,7 @@ namespace ScriptManager
             conf["Path"]["bolPath"].StringValue = bolPath;
             conf["Settings"]["replace"].BoolValue = replaceScript;
             conf["Settings"]["move"].BoolValue = moveScript;
+            conf["Settings"]["language"].StringValue = culture;
             conf["Constant"]["bolName"].StringValue = BOLNAME;
             conf["Constant"]["dllName"].StringValue = DLLNAME;
             conf["Debug"]["debug"].BoolValue = true;
@@ -340,6 +406,22 @@ namespace ScriptManager
             cboCategoryList.DataSource = categoriesDataSource;
             cboCategoryList.DisplayMember = "Name";
             cboCategoryList.ValueMember = "Value";
+        }
+
+        private void fillLanguageCombobox()
+        {
+            writeLog("Loading language for translation");
+            var languageDataSource = new List<ComboBoxItem>();
+            languageDataSource.Add(new ComboBoxItem("Select a category", "default"));
+            languageDataSource.Add(new ComboBoxItem("French", "fr"));
+            languageDataSource.Add(new ComboBoxItem("English", "en"));
+            languageDataSource.Add(new ComboBoxItem("German", "de"));
+            languageDataSource.Add(new ComboBoxItem("Chinese", "ch"));
+
+            // set display & value, readonly
+            cboLanguage.DataSource = languageDataSource;
+            cboLanguage.DisplayMember = "Name";
+            cboLanguage.ValueMember = "Value";
         }
 
         private Version getLatestVersion()
@@ -538,7 +620,66 @@ namespace ScriptManager
             exportLogsFromCombo();
         }
 
+        private void cboLanguage_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // changing language
+            writeStringSettingsToConf("Settings", "language", cboLanguage.ValueMember);
+            //Thread.CurrentThread.CurrentUICulture = new CultureInfo(cboLanguage.ValueMember);
+            //this.InitializeComponent();
+        }
+
+        private void btnMoveToNotLoaded_Click(object sender, EventArgs e)
+        {
+            // move selected to notloaded
+            // => Move from /Scripts to /NoScripts
+            var listScript = new List<string>();
+            foreach(var item in listScriptsLoaded.SelectedItems)
+            {
+                string fromPath = Path.GetFullPath(bolPath + "/Scripts/" + item.ToString());
+                string toPath = Path.GetFullPath(bolPath + "/NotScripts/" + item.ToString());
+                writeLog("items from: " + fromPath);
+                writeLog("items to: " + toPath);
+                moveFile(fromPath, toPath);
+
+                listScript.Add(item.ToString());
+            }
+
+            // after foreach, remove/add items to proper list
+            foreach(var script in listScript)
+            {
+                listScriptsLoaded.Items.Remove(script);
+                listScriptsNotLoaded.Items.Add(script);
+            }
+        }
+
+        private void btnMoveToLoaded_Click(object sender, EventArgs e)
+        {
+            // move selected to loaded
+            // move selected to notloaded
+            // => Move from /Scripts to /NoScripts
+            var listScript = new List<string>();
+            foreach (var item in listScriptsNotLoaded.SelectedItems)
+            {
+                string fromPath = Path.GetFullPath(bolPath + "/NotScripts/" + item.ToString());
+                string toPath = Path.GetFullPath(bolPath + "/Scripts/" + item.ToString());
+                writeLog("items from: " + fromPath);
+                writeLog("items to: " + toPath);
+                moveFile(fromPath, toPath);
+
+                listScript.Add(item.ToString());
+            }
+
+            // after foreach, remove/add items to proper list
+            foreach (var script in listScript)
+            {
+                listScriptsNotLoaded.Items.Remove(script);
+                listScriptsLoaded.Items.Add(script);
+            }
+        }
+
         #endregion
+
+
 
     }
 }
