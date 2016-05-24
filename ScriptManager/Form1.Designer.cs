@@ -31,12 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ScriptManagerForm));
             this.cboChampionsList = new System.Windows.Forms.ComboBox();
             this.grid_champions = new System.Windows.Forms.DataGridView();
-            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PaidScript = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Author = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ForumThread = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.Download = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.DownloadUrl = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.openFileBol = new System.Windows.Forms.OpenFileDialog();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabMain = new System.Windows.Forms.TabPage();
@@ -44,6 +38,11 @@
             this.lDownload = new System.Windows.Forms.Label();
             this.downloadBar = new System.Windows.Forms.ProgressBar();
             this.cboCategoryList = new System.Windows.Forms.ComboBox();
+            this.tabManage = new System.Windows.Forms.TabPage();
+            this.btnMoveToLoaded = new System.Windows.Forms.Button();
+            this.btnMoveToNotLoaded = new System.Windows.Forms.Button();
+            this.listScriptsNotLoaded = new System.Windows.Forms.ListBox();
+            this.listScriptsLoaded = new System.Windows.Forms.ListBox();
             this.tabSettings = new System.Windows.Forms.TabPage();
             this.groupLanguage = new System.Windows.Forms.GroupBox();
             this.lblLanguage = new System.Windows.Forms.Label();
@@ -58,96 +57,56 @@
             this.tbLogs = new System.Windows.Forms.TextBox();
             this.tabAbout = new System.Windows.Forms.TabPage();
             this.lAuthor = new System.Windows.Forms.Label();
-            this.tabManage = new System.Windows.Forms.TabPage();
-            this.listScriptsLoaded = new System.Windows.Forms.ListBox();
-            this.listScriptsNotLoaded = new System.Windows.Forms.ListBox();
-            this.btnMoveToNotLoaded = new System.Windows.Forms.Button();
-            this.btnMoveToLoaded = new System.Windows.Forms.Button();
+            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PaidScript = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Author = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SujetForum = new System.Windows.Forms.DataGridViewLinkColumn();
+            this.Download = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.DownloadUrl = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.grid_champions)).BeginInit();
             this.tabControl.SuspendLayout();
             this.tabMain.SuspendLayout();
+            this.tabManage.SuspendLayout();
             this.tabSettings.SuspendLayout();
             this.groupLanguage.SuspendLayout();
             this.groupDebug.SuspendLayout();
             this.groupBasic.SuspendLayout();
             this.tabLogs.SuspendLayout();
             this.tabAbout.SuspendLayout();
-            this.tabManage.SuspendLayout();
             this.SuspendLayout();
             // 
             // cboChampionsList
             // 
+            resources.ApplyResources(this.cboChampionsList, "cboChampionsList");
             this.cboChampionsList.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cboChampionsList.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboChampionsList.FormattingEnabled = true;
-            resources.ApplyResources(this.cboChampionsList, "cboChampionsList");
             this.cboChampionsList.Name = "cboChampionsList";
             this.cboChampionsList.SelectedIndexChanged += new System.EventHandler(this.cboChampionsList_SelectedIndexChanged);
             // 
             // grid_champions
             // 
+            resources.ApplyResources(this.grid_champions, "grid_champions");
             this.grid_champions.AllowUserToAddRows = false;
             this.grid_champions.AllowUserToDeleteRows = false;
             this.grid_champions.AllowUserToOrderColumns = true;
-            resources.ApplyResources(this.grid_champions, "grid_champions");
             this.grid_champions.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.grid_champions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grid_champions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Title,
             this.PaidScript,
             this.Author,
-            this.ForumThread,
+            this.SujetForum,
             this.Download,
             this.DownloadUrl});
             this.grid_champions.Name = "grid_champions";
             this.grid_champions.ReadOnly = true;
             this.grid_champions.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grid_champions_CellClick);
             // 
-            // Title
-            // 
-            resources.ApplyResources(this.Title, "Title");
-            this.Title.Name = "Title";
-            this.Title.ReadOnly = true;
-            // 
-            // PaidScript
-            // 
-            resources.ApplyResources(this.PaidScript, "PaidScript");
-            this.PaidScript.Name = "PaidScript";
-            this.PaidScript.ReadOnly = true;
-            // 
-            // Author
-            // 
-            resources.ApplyResources(this.Author, "Author");
-            this.Author.Name = "Author";
-            this.Author.ReadOnly = true;
-            // 
-            // ForumThread
-            // 
-            resources.ApplyResources(this.ForumThread, "ForumThread");
-            this.ForumThread.Name = "ForumThread";
-            this.ForumThread.ReadOnly = true;
-            this.ForumThread.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ForumThread.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.ForumThread.Text = "Forum Thread";
-            // 
-            // Download
-            // 
-            resources.ApplyResources(this.Download, "Download");
-            this.Download.Name = "Download";
-            this.Download.ReadOnly = true;
-            this.Download.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Download.Text = "Download";
-            this.Download.UseColumnTextForButtonValue = true;
-            // 
-            // DownloadUrl
-            // 
-            resources.ApplyResources(this.DownloadUrl, "DownloadUrl");
-            this.DownloadUrl.Name = "DownloadUrl";
-            this.DownloadUrl.ReadOnly = true;
-            // 
             // openFileBol
             // 
             this.openFileBol.FileName = "openFileBol";
+            resources.ApplyResources(this.openFileBol, "openFileBol");
             // 
             // tabControl
             // 
@@ -162,13 +121,13 @@
             // 
             // tabMain
             // 
+            resources.ApplyResources(this.tabMain, "tabMain");
             this.tabMain.Controls.Add(this.lDownloadDetails);
             this.tabMain.Controls.Add(this.lDownload);
             this.tabMain.Controls.Add(this.downloadBar);
             this.tabMain.Controls.Add(this.cboCategoryList);
             this.tabMain.Controls.Add(this.grid_champions);
             this.tabMain.Controls.Add(this.cboChampionsList);
-            resources.ApplyResources(this.tabMain, "tabMain");
             this.tabMain.Name = "tabMain";
             this.tabMain.UseVisualStyleBackColor = true;
             // 
@@ -189,27 +148,63 @@
             // 
             // cboCategoryList
             // 
+            resources.ApplyResources(this.cboCategoryList, "cboCategoryList");
             this.cboCategoryList.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cboCategoryList.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboCategoryList.FormattingEnabled = true;
-            resources.ApplyResources(this.cboCategoryList, "cboCategoryList");
             this.cboCategoryList.Name = "cboCategoryList";
             this.cboCategoryList.SelectedIndexChanged += new System.EventHandler(this.cboCategoryList_SelectedIndexChanged);
             // 
+            // tabManage
+            // 
+            resources.ApplyResources(this.tabManage, "tabManage");
+            this.tabManage.Controls.Add(this.btnMoveToLoaded);
+            this.tabManage.Controls.Add(this.btnMoveToNotLoaded);
+            this.tabManage.Controls.Add(this.listScriptsNotLoaded);
+            this.tabManage.Controls.Add(this.listScriptsLoaded);
+            this.tabManage.Name = "tabManage";
+            this.tabManage.UseVisualStyleBackColor = true;
+            // 
+            // btnMoveToLoaded
+            // 
+            resources.ApplyResources(this.btnMoveToLoaded, "btnMoveToLoaded");
+            this.btnMoveToLoaded.Name = "btnMoveToLoaded";
+            this.btnMoveToLoaded.UseVisualStyleBackColor = true;
+            this.btnMoveToLoaded.Click += new System.EventHandler(this.btnMoveToLoaded_Click);
+            // 
+            // btnMoveToNotLoaded
+            // 
+            resources.ApplyResources(this.btnMoveToNotLoaded, "btnMoveToNotLoaded");
+            this.btnMoveToNotLoaded.Name = "btnMoveToNotLoaded";
+            this.btnMoveToNotLoaded.UseVisualStyleBackColor = true;
+            this.btnMoveToNotLoaded.Click += new System.EventHandler(this.btnMoveToNotLoaded_Click);
+            // 
+            // listScriptsNotLoaded
+            // 
+            resources.ApplyResources(this.listScriptsNotLoaded, "listScriptsNotLoaded");
+            this.listScriptsNotLoaded.FormattingEnabled = true;
+            this.listScriptsNotLoaded.Name = "listScriptsNotLoaded";
+            // 
+            // listScriptsLoaded
+            // 
+            resources.ApplyResources(this.listScriptsLoaded, "listScriptsLoaded");
+            this.listScriptsLoaded.FormattingEnabled = true;
+            this.listScriptsLoaded.Name = "listScriptsLoaded";
+            // 
             // tabSettings
             // 
+            resources.ApplyResources(this.tabSettings, "tabSettings");
             this.tabSettings.Controls.Add(this.groupLanguage);
             this.tabSettings.Controls.Add(this.groupDebug);
             this.tabSettings.Controls.Add(this.groupBasic);
-            resources.ApplyResources(this.tabSettings, "tabSettings");
             this.tabSettings.Name = "tabSettings";
             this.tabSettings.UseVisualStyleBackColor = true;
             // 
             // groupLanguage
             // 
+            resources.ApplyResources(this.groupLanguage, "groupLanguage");
             this.groupLanguage.Controls.Add(this.lblLanguage);
             this.groupLanguage.Controls.Add(this.cboLanguage);
-            resources.ApplyResources(this.groupLanguage, "groupLanguage");
             this.groupLanguage.Name = "groupLanguage";
             this.groupLanguage.TabStop = false;
             // 
@@ -220,8 +215,8 @@
             // 
             // cboLanguage
             // 
-            this.cboLanguage.FormattingEnabled = true;
             resources.ApplyResources(this.cboLanguage, "cboLanguage");
+            this.cboLanguage.FormattingEnabled = true;
             this.cboLanguage.Name = "cboLanguage";
             this.cboLanguage.SelectedIndexChanged += new System.EventHandler(this.cboLanguage_SelectedIndexChanged);
             // 
@@ -253,9 +248,9 @@
             // 
             // groupBasic
             // 
+            resources.ApplyResources(this.groupBasic, "groupBasic");
             this.groupBasic.Controls.Add(this.cbAddAutoupdate);
             this.groupBasic.Controls.Add(this.cbMoveScripts);
-            resources.ApplyResources(this.groupBasic, "groupBasic");
             this.groupBasic.Name = "groupBasic";
             this.groupBasic.TabStop = false;
             // 
@@ -291,8 +286,8 @@
             // 
             // tabAbout
             // 
-            this.tabAbout.Controls.Add(this.lAuthor);
             resources.ApplyResources(this.tabAbout, "tabAbout");
+            this.tabAbout.Controls.Add(this.lAuthor);
             this.tabAbout.Name = "tabAbout";
             this.tabAbout.UseVisualStyleBackColor = true;
             // 
@@ -301,41 +296,47 @@
             resources.ApplyResources(this.lAuthor, "lAuthor");
             this.lAuthor.Name = "lAuthor";
             // 
-            // tabManage
+            // Title
             // 
-            this.tabManage.Controls.Add(this.btnMoveToLoaded);
-            this.tabManage.Controls.Add(this.btnMoveToNotLoaded);
-            this.tabManage.Controls.Add(this.listScriptsNotLoaded);
-            this.tabManage.Controls.Add(this.listScriptsLoaded);
-            resources.ApplyResources(this.tabManage, "tabManage");
-            this.tabManage.Name = "tabManage";
-            this.tabManage.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.Title, "Title");
+            this.Title.Name = "Title";
+            this.Title.ReadOnly = true;
             // 
-            // listScriptsLoaded
+            // PaidScript
             // 
-            resources.ApplyResources(this.listScriptsLoaded, "listScriptsLoaded");
-            this.listScriptsLoaded.FormattingEnabled = true;
-            this.listScriptsLoaded.Name = "listScriptsLoaded";
+            resources.ApplyResources(this.PaidScript, "PaidScript");
+            this.PaidScript.Name = "PaidScript";
+            this.PaidScript.ReadOnly = true;
             // 
-            // listScriptsNotLoaded
+            // Author
             // 
-            resources.ApplyResources(this.listScriptsNotLoaded, "listScriptsNotLoaded");
-            this.listScriptsNotLoaded.FormattingEnabled = true;
-            this.listScriptsNotLoaded.Name = "listScriptsNotLoaded";
+            resources.ApplyResources(this.Author, "Author");
+            this.Author.Name = "Author";
+            this.Author.ReadOnly = true;
             // 
-            // btnMoveToNotLoaded
+            // SujetForum
             // 
-            resources.ApplyResources(this.btnMoveToNotLoaded, "btnMoveToNotLoaded");
-            this.btnMoveToNotLoaded.Name = "btnMoveToNotLoaded";
-            this.btnMoveToNotLoaded.UseVisualStyleBackColor = true;
-            this.btnMoveToNotLoaded.Click += new System.EventHandler(this.btnMoveToNotLoaded_Click);
+            resources.ApplyResources(this.SujetForum, "SujetForum");
+            this.SujetForum.Name = "SujetForum";
+            this.SujetForum.ReadOnly = true;
+            this.SujetForum.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.SujetForum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.SujetForum.Text = "Forum Thread";
             // 
-            // btnMoveToLoaded
+            // Download
             // 
-            resources.ApplyResources(this.btnMoveToLoaded, "btnMoveToLoaded");
-            this.btnMoveToLoaded.Name = "btnMoveToLoaded";
-            this.btnMoveToLoaded.UseVisualStyleBackColor = true;
-            this.btnMoveToLoaded.Click += new System.EventHandler(this.btnMoveToLoaded_Click);
+            resources.ApplyResources(this.Download, "Download");
+            this.Download.Name = "Download";
+            this.Download.ReadOnly = true;
+            this.Download.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Download.Text = "Download";
+            this.Download.UseColumnTextForButtonValue = true;
+            // 
+            // DownloadUrl
+            // 
+            resources.ApplyResources(this.DownloadUrl, "DownloadUrl");
+            this.DownloadUrl.Name = "DownloadUrl";
+            this.DownloadUrl.ReadOnly = true;
             // 
             // ScriptManagerForm
             // 
@@ -350,6 +351,7 @@
             this.tabControl.ResumeLayout(false);
             this.tabMain.ResumeLayout(false);
             this.tabMain.PerformLayout();
+            this.tabManage.ResumeLayout(false);
             this.tabSettings.ResumeLayout(false);
             this.groupLanguage.ResumeLayout(false);
             this.groupLanguage.PerformLayout();
@@ -361,7 +363,6 @@
             this.tabLogs.PerformLayout();
             this.tabAbout.ResumeLayout(false);
             this.tabAbout.PerformLayout();
-            this.tabManage.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -388,12 +389,6 @@
         private System.Windows.Forms.ProgressBar downloadBar;
         private System.Windows.Forms.Label lDownload;
         private System.Windows.Forms.Label lDownloadDetails;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Title;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn PaidScript;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Author;
-        private System.Windows.Forms.DataGridViewLinkColumn ForumThread;
-        private System.Windows.Forms.DataGridViewButtonColumn Download;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DownloadUrl;
         private System.Windows.Forms.GroupBox groupLanguage;
         private System.Windows.Forms.Label lblLanguage;
         private System.Windows.Forms.ComboBox cboLanguage;
@@ -402,6 +397,12 @@
         private System.Windows.Forms.ListBox listScriptsLoaded;
         private System.Windows.Forms.Button btnMoveToLoaded;
         private System.Windows.Forms.Button btnMoveToNotLoaded;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Title;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn PaidScript;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Author;
+        private System.Windows.Forms.DataGridViewLinkColumn SujetForum;
+        private System.Windows.Forms.DataGridViewButtonColumn Download;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DownloadUrl;
     }
 }
 

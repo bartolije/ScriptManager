@@ -32,7 +32,6 @@ namespace ScriptManager
         string apiSearchChampion = "http://www.bol-tools.com/api/search/champion/";
         string apiSearchCategory = "http://www.bol-tools.com/api/search/category/";
         string onlineVersionUrl = "https://raw.githubusercontent.com/bartolije/version/master/lazytool.txt";
-        string currentPath;
         string bolPath;
         string downloadFileName;
         Version version;
@@ -63,8 +62,7 @@ namespace ScriptManager
             writeLog("Loaded on " + DateTime.Now.ToShortDateString());
 
             // get app path
-            currentPath = Path.GetDirectoryName(Application.ExecutablePath);
-            writeLog("App path: " + currentPath);
+            writeLog("App path: " + Path.GetDirectoryName(Application.ExecutablePath));
 
             // check version for auto-update
             version = Assembly.GetEntryAssembly().GetName().Version;
@@ -107,7 +105,7 @@ namespace ScriptManager
 
             fillChampionCombobox();
             fillCategoryCombobox();
-            //fillLanguageCombobox();
+            fillLanguageCombobox();
             fillListScripts();
         }
 
@@ -299,6 +297,8 @@ namespace ScriptManager
             }while(!isValidPath);
         }
 
+        #region Config file management
+
         private void createFreshConfigFile()
         {
             Configuration conf = new Configuration();
@@ -364,6 +364,8 @@ namespace ScriptManager
             conf[section][key].IntValue = value;
             conf.SaveToFile(INIFILE);
         }
+
+        #endregion
 
         private static string getCurrentCulture()
         {
@@ -477,6 +479,21 @@ namespace ScriptManager
             process.StartInfo = new ProcessStartInfo(browerPath);
             process.StartInfo.Arguments = "\"" + url + "\"";
             process.Start();
+        }
+
+        private void checkScriptsLoadedListCount()
+        {
+            int listCount = 0;
+            foreach(var item in listScriptsLoaded.Items)
+            {
+                listCount++;
+            }
+
+            if (listCount > 5)
+            {
+                writeLog("user got more than 5 scripts");
+                MessageBox.Show("hey!! Just to be anoying, you got more than 5 scripts", "Here again");
+            }
         }
 
         #endregion
@@ -623,9 +640,9 @@ namespace ScriptManager
         private void cboLanguage_SelectedIndexChanged(object sender, EventArgs e)
         {
             // changing language
-            writeStringSettingsToConf("Settings", "language", cboLanguage.ValueMember);
-            //Thread.CurrentThread.CurrentUICulture = new CultureInfo(cboLanguage.ValueMember);
-            //this.InitializeComponent();
+            writeStringSettingsToConf("Settings", "language", cboLanguage.SelectedValue.ToString());
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo(cboLanguage.SelectedValue.ToString());
+            this.InitializeComponent();
         }
 
         private void btnMoveToNotLoaded_Click(object sender, EventArgs e)
@@ -650,6 +667,8 @@ namespace ScriptManager
                 listScriptsLoaded.Items.Remove(script);
                 listScriptsNotLoaded.Items.Add(script);
             }
+
+            checkScriptsLoadedListCount();
         }
 
         private void btnMoveToLoaded_Click(object sender, EventArgs e)
@@ -675,6 +694,8 @@ namespace ScriptManager
                 listScriptsNotLoaded.Items.Remove(script);
                 listScriptsLoaded.Items.Add(script);
             }
+
+            checkScriptsLoadedListCount();
         }
 
         #endregion

@@ -118,64 +118,32 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="cbMoveScripts.Size" type="System.Drawing.Size, System.Drawing">
-    <value>202, 17</value>
+  <data name="lDownloadDetails.Size" type="System.Drawing.Size, System.Drawing">
+    <value>115, 13</value>
   </data>
-  <data name="cbMoveScripts.Text" xml:space="preserve">
-    <value>Déplacer script après téléchargement</value>
+  <data name="lDownload.Location" type="System.Drawing.Point, System.Drawing">
+    <value>164, 9</value>
   </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>Script Manager Baguette 2</value>
+  <data name="lDownload.Size" type="System.Drawing.Size, System.Drawing">
+    <value>111, 13</value>
   </data>
-  <data name="Author.HeaderText" xml:space="preserve">
-    <value>Auteur</value>
+  <data name="lblLanguage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>49, 13</value>
   </data>
-  <data name="cbAddAutoupdate.Text" xml:space="preserve">
-    <value>Mettre à jour automatiquement</value>
+  <data name="cbReplaceScript.Location" type="System.Drawing.Point, System.Drawing">
+    <value>34, 42</value>
   </data>
-  <data name="cbDebug.Text" xml:space="preserve">
-    <value>Logs les actions</value>
+  <data name="cbReplaceScript.Size" type="System.Drawing.Size, System.Drawing">
+    <value>165, 17</value>
   </data>
-  <data name="cboCategoryList.Text" xml:space="preserve">
-    <value>Choisir une catégorie</value>
+  <data name="cbDebug.Size" type="System.Drawing.Size, System.Drawing">
+    <value>102, 17</value>
   </data>
-  <data name="cboChampionsList.Text" xml:space="preserve">
-    <value>Choisur un champion</value>
+  <data name="cbAddAutoupdate.Size" type="System.Drawing.Size, System.Drawing">
+    <value>169, 17</value>
   </data>
-  <data name="cbReplaceScript.Text" xml:space="preserve">
-    <value>Remplacer le script si existant</value>
-  </data>
-  <data name="Download.HeaderText" xml:space="preserve">
-    <value>Télécharger</value>
-  </data>
-  <data name="groupBasic.Text" xml:space="preserve">
-    <value>Bases</value>
-  </data>
-  <data name="lblLanguage.Text" xml:space="preserve">
-    <value>Langage</value>
-  </data>
-  <data name="lDownload.Text" xml:space="preserve">
-    <value>Statut téléchargement</value>
-  </data>
-  <data name="lDownloadDetails.Text" xml:space="preserve">
-    <value>Détails téléchargement</value>
-  </data>
-  <data name="PaidScript.HeaderText" xml:space="preserve">
-    <value>Payant</value>
-  </data>
-  <data name="tabAbout.Text" xml:space="preserve">
-    <value>A propos</value>
-  </data>
-  <data name="tabMain.Text" xml:space="preserve">
-    <value>Accueil</value>
-  </data>
-  <data name="tabManage.Text" xml:space="preserve">
-    <value>Gérer les Scripts</value>
-  </data>
-  <data name="tabSettings.Text" xml:space="preserve">
-    <value>Options</value>
-  </data>
-  <data name="Title.HeaderText" xml:space="preserve">
-    <value>Titre</value>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="PaidScript.Width" type="System.Int32, mscorlib">
+    <value>50</value>
   </data>
 </root>

@@ -117,65 +117,86 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="cbMoveScripts.Size" type="System.Drawing.Size, System.Drawing">
-    <value>202, 17</value>
-  </data>
-  <data name="cbMoveScripts.Text" xml:space="preserve">
-    <value>Déplacer script après téléchargement</value>
-  </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>Script Manager Baguette 2</value>
-  </data>
-  <data name="Author.HeaderText" xml:space="preserve">
-    <value>Auteur</value>
-  </data>
-  <data name="cbAddAutoupdate.Text" xml:space="preserve">
-    <value>Mettre à jour automatiquement</value>
-  </data>
-  <data name="cbDebug.Text" xml:space="preserve">
-    <value>Logs les actions</value>
-  </data>
-  <data name="cboCategoryList.Text" xml:space="preserve">
-    <value>Choisir une catégorie</value>
-  </data>
-  <data name="cboChampionsList.Text" xml:space="preserve">
-    <value>Choisur un champion</value>
-  </data>
-  <data name="cbReplaceScript.Text" xml:space="preserve">
-    <value>Remplacer le script si existant</value>
-  </data>
-  <data name="Download.HeaderText" xml:space="preserve">
-    <value>Télécharger</value>
-  </data>
-  <data name="groupBasic.Text" xml:space="preserve">
-    <value>Bases</value>
-  </data>
-  <data name="lblLanguage.Text" xml:space="preserve">
-    <value>Langage</value>
-  </data>
-  <data name="lDownload.Text" xml:space="preserve">
-    <value>Statut téléchargement</value>
-  </data>
-  <data name="lDownloadDetails.Text" xml:space="preserve">
-    <value>Détails téléchargement</value>
+  <data name="Title.HeaderText" xml:space="preserve">
+    <value>标题</value>
   </data>
   <data name="PaidScript.HeaderText" xml:space="preserve">
-    <value>Payant</value>
+    <value>支付</value>
   </data>
-  <data name="tabAbout.Text" xml:space="preserve">
-    <value>A propos</value>
+  <data name="Author.HeaderText" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="SujetForum.HeaderText" xml:space="preserve">
+    <value>论坛主题</value>
+  </data>
+  <data name="Download.HeaderText" xml:space="preserve">
+    <value>下载</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="lDownload.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 13</value>
+  </data>
+  <data name="lDownload.Text" xml:space="preserve">
+    <value>下载状态</value>
   </data>
   <data name="tabMain.Text" xml:space="preserve">
-    <value>Accueil</value>
+    <value>主要</value>
   </data>
   <data name="tabManage.Text" xml:space="preserve">
-    <value>Gérer les Scripts</value>
+    <value>管理脚本</value>
+  </data>
+  <data name="lblLanguage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>31, 13</value>
+  </data>
+  <data name="lblLanguage.Text" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="groupLanguage.Text" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="cbReplaceScript.Location" type="System.Drawing.Point, System.Drawing">
+    <value>61, 42</value>
+  </data>
+  <data name="cbReplaceScript.Size" type="System.Drawing.Size, System.Drawing">
+    <value>122, 17</value>
+  </data>
+  <data name="cbReplaceScript.Text" xml:space="preserve">
+    <value>如果存在替代脚本</value>
+  </data>
+  <data name="cbDebug.Location" type="System.Drawing.Point, System.Drawing">
+    <value>109, 19</value>
+  </data>
+  <data name="cbDebug.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 17</value>
+  </data>
+  <data name="cbDebug.Text" xml:space="preserve">
+    <value>日志动作</value>
+  </data>
+  <data name="groupDebug.Text" xml:space="preserve">
+    <value>调试</value>
+  </data>
+  <data name="cbAddAutoupdate.Size" type="System.Drawing.Size, System.Drawing">
+    <value>98, 17</value>
+  </data>
+  <data name="cbAddAutoupdate.Text" xml:space="preserve">
+    <value>加入自动更新</value>
+  </data>
+  <data name="cbMoveScripts.Size" type="System.Drawing.Size, System.Drawing">
+    <value>122, 17</value>
+  </data>
+  <data name="cbMoveScripts.Text" xml:space="preserve">
+    <value>下载的时候把脚本</value>
+  </data>
+  <data name="groupBasic.Text" xml:space="preserve">
+    <value>基础知识</value>
   </data>
   <data name="tabSettings.Text" xml:space="preserve">
-    <value>Options</value>
+    <value>设置</value>
   </data>
-  <data name="Title.HeaderText" xml:space="preserve">
-    <value>Titre</value>
+  <data name="tabLogs.Text" xml:space="preserve">
+    <value>日志</value>
+  </data>
+  <data name="tabAbout.Text" xml:space="preserve">
+    <value>关于</value>
   </data>
 </root>
