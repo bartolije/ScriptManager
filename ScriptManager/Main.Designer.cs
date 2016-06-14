@@ -31,6 +31,12 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ScriptManagerForm));
             this.cboChampionsList = new System.Windows.Forms.ComboBox();
             this.grid_champions = new System.Windows.Forms.DataGridView();
+            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PaidScript = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Author = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SujetForum = new System.Windows.Forms.DataGridViewLinkColumn();
+            this.Download = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.DownloadUrl = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.openFileBol = new System.Windows.Forms.OpenFileDialog();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabMain = new System.Windows.Forms.TabPage();
@@ -56,13 +62,8 @@
             this.tabLogs = new System.Windows.Forms.TabPage();
             this.tbLogs = new System.Windows.Forms.TextBox();
             this.tabAbout = new System.Windows.Forms.TabPage();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lAuthor = new System.Windows.Forms.Label();
-            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PaidScript = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Author = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.SujetForum = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.Download = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.DownloadUrl = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.grid_champions)).BeginInit();
             this.tabControl.SuspendLayout();
             this.tabMain.SuspendLayout();
@@ -73,6 +74,7 @@
             this.groupBasic.SuspendLayout();
             this.tabLogs.SuspendLayout();
             this.tabAbout.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // cboChampionsList
@@ -102,6 +104,48 @@
             this.grid_champions.Name = "grid_champions";
             this.grid_champions.ReadOnly = true;
             this.grid_champions.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grid_champions_CellClick);
+            // 
+            // Title
+            // 
+            resources.ApplyResources(this.Title, "Title");
+            this.Title.Name = "Title";
+            this.Title.ReadOnly = true;
+            // 
+            // PaidScript
+            // 
+            resources.ApplyResources(this.PaidScript, "PaidScript");
+            this.PaidScript.Name = "PaidScript";
+            this.PaidScript.ReadOnly = true;
+            // 
+            // Author
+            // 
+            resources.ApplyResources(this.Author, "Author");
+            this.Author.Name = "Author";
+            this.Author.ReadOnly = true;
+            // 
+            // SujetForum
+            // 
+            resources.ApplyResources(this.SujetForum, "SujetForum");
+            this.SujetForum.Name = "SujetForum";
+            this.SujetForum.ReadOnly = true;
+            this.SujetForum.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.SujetForum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.SujetForum.Text = "Forum Thread";
+            // 
+            // Download
+            // 
+            resources.ApplyResources(this.Download, "Download");
+            this.Download.Name = "Download";
+            this.Download.ReadOnly = true;
+            this.Download.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Download.Text = "Download";
+            this.Download.UseColumnTextForButtonValue = true;
+            // 
+            // DownloadUrl
+            // 
+            resources.ApplyResources(this.DownloadUrl, "DownloadUrl");
+            this.DownloadUrl.Name = "DownloadUrl";
+            this.DownloadUrl.ReadOnly = true;
             // 
             // openFileBol
             // 
@@ -287,56 +331,21 @@
             // tabAbout
             // 
             resources.ApplyResources(this.tabAbout, "tabAbout");
+            this.tabAbout.Controls.Add(this.pictureBox1);
             this.tabAbout.Controls.Add(this.lAuthor);
             this.tabAbout.Name = "tabAbout";
             this.tabAbout.UseVisualStyleBackColor = true;
+            // 
+            // pictureBox1
+            // 
+            resources.ApplyResources(this.pictureBox1, "pictureBox1");
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.TabStop = false;
             // 
             // lAuthor
             // 
             resources.ApplyResources(this.lAuthor, "lAuthor");
             this.lAuthor.Name = "lAuthor";
-            // 
-            // Title
-            // 
-            resources.ApplyResources(this.Title, "Title");
-            this.Title.Name = "Title";
-            this.Title.ReadOnly = true;
-            // 
-            // PaidScript
-            // 
-            resources.ApplyResources(this.PaidScript, "PaidScript");
-            this.PaidScript.Name = "PaidScript";
-            this.PaidScript.ReadOnly = true;
-            // 
-            // Author
-            // 
-            resources.ApplyResources(this.Author, "Author");
-            this.Author.Name = "Author";
-            this.Author.ReadOnly = true;
-            // 
-            // SujetForum
-            // 
-            resources.ApplyResources(this.SujetForum, "SujetForum");
-            this.SujetForum.Name = "SujetForum";
-            this.SujetForum.ReadOnly = true;
-            this.SujetForum.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.SujetForum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.SujetForum.Text = "Forum Thread";
-            // 
-            // Download
-            // 
-            resources.ApplyResources(this.Download, "Download");
-            this.Download.Name = "Download";
-            this.Download.ReadOnly = true;
-            this.Download.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Download.Text = "Download";
-            this.Download.UseColumnTextForButtonValue = true;
-            // 
-            // DownloadUrl
-            // 
-            resources.ApplyResources(this.DownloadUrl, "DownloadUrl");
-            this.DownloadUrl.Name = "DownloadUrl";
-            this.DownloadUrl.ReadOnly = true;
             // 
             // ScriptManagerForm
             // 
@@ -363,6 +372,7 @@
             this.tabLogs.PerformLayout();
             this.tabAbout.ResumeLayout(false);
             this.tabAbout.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -403,6 +413,7 @@
         private System.Windows.Forms.DataGridViewLinkColumn SujetForum;
         private System.Windows.Forms.DataGridViewButtonColumn Download;
         private System.Windows.Forms.DataGridViewTextBoxColumn DownloadUrl;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 
