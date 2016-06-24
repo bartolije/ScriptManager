@@ -74,8 +74,8 @@ namespace ScriptManager
             {
                 MessageBox.Show("A new version is available online.\nTo avoig bugs or disfunctions, please, download it.\n\n Application will now exit.", "A new version is available");
                 writeLog("new version available: Exit");
-                System.Diagnostics.Process.Start("http://www.forum.botoflegends.com/topic/94198-");
-                Application.Exit();
+                System.Diagnostics.Process.Start("https://forum.botoflegends.com/topic/94198-tool-lazy-script-manager/?p=1114579");
+                Environment.Exit(1);
             }
 
             // check settings ==> Default
