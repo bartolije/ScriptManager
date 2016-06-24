@@ -29,8 +29,8 @@ namespace ScriptManager
         const string BOLNAME = "BoL Studio.exe";
         const string DLLNAME = "agent.dll";
 
-        string apiSearchChampion = "http://www.bol-tools.com/api/search/champion/";
-        string apiSearchCategory = "http://www.bol-tools.com/api/search/category/";
+        string apiSearchChampion = "https://www.bol-tools.com/api/search/champion/";
+        string apiSearchCategory = "https://www.bol-tools.com/api/search/category/";
         string onlineVersionUrl = "https://raw.githubusercontent.com/bartolije/version/master/lazytool.txt";
         string bolPath;
         string downloadFileName;
@@ -511,7 +511,7 @@ namespace ScriptManager
             }
 
             var selectedChampionkey = this.cboChampionsList.SelectedValue;
-            var url = apiSearchChampion + selectedChampionkey;
+            var url = apiSearchChampion + selectedChampionkey + "/0";
 
             var scriptsList = getScriptsListFromUrl(url);
             foreach (var script in scriptsList)
