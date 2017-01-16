@@ -137,6 +137,9 @@ namespace ScriptManager
                         File.Delete(toPath);
                     }
                     File.Move(fromPath, toPath);
+
+                    //reload scripts list
+                    fillListScripts();
                 }
                 catch
                 {
@@ -148,6 +151,9 @@ namespace ScriptManager
 
         private void fillListScripts()
         {
+            listScriptsLoaded.Items.Clear();
+            listScriptsNotLoaded.Items.Clear();
+
             // Fill list from /Scripts folder
             foreach (var script in getScriptsInFolder(Path.GetFullPath(bolPath + "/Scripts")))
             {
