@@ -24,14 +24,15 @@ namespace ScriptManager
     public partial class ScriptManagerForm : MaterialForm
     {
         // TODO: make string as ressources and load them depending of current computer language
- 
-        const string INIFILE = "conf.ini";
-        const string BOLNAME = "BoL Studio.exe";
-        const string DLLNAME = "agent.dll";
 
-        string apiSearchChampion = "https://www.bol-tools.com/api/search/champion/";
-        string apiSearchCategory = "https://www.bol-tools.com/api/search/category/";
-        string onlineVersionUrl = "https://raw.githubusercontent.com/bartolije/version/master/lazytool.txt";
+        private const string INI_FILE = "conf.ini";
+        private const string BOL_NAME = "BoL Studio.exe";
+        private const string DLL_NAME = "agent.dll";
+
+        private const string apiSearchChampion = "http://www.bol-tools.com/api/search/champion/";
+        private const string apiSearchCategory = "http://www.bol-tools.com/api/search/category/";
+        private const string onlineVersionUrl = "https://raw.githubusercontent.com/bartolije/version/master/lazytool.txt";
+        private const string apiGetChampionList = "http://bol-tools.com/api/list/champions";
         string bolPath;
         string downloadFileName;
         Version version;
@@ -73,8 +74,8 @@ namespace ScriptManager
             if(version < onlineVersion)
             {
                 MessageBox.Show("A new version is available online.\nTo avoig bugs or disfunctions, please, download it.\n\n Application will now exit.", "A new version is available");
-                writeLog("new version available: Exit");
-                System.Diagnostics.Process.Start("https://forum.botoflegends.com/topic/94198-tool-lazy-script-manager/?p=1114579");
+                writeLog("A new version is available: Exit");
+                Process.Start("https://github.com/bartolije/version");
                 Environment.Exit(1);
             }
 
@@ -88,7 +89,7 @@ namespace ScriptManager
 
             #region Start and load ini file
 
-            if (File.Exists(INIFILE))
+            if (File.Exists(INI_FILE))
             {
                 // test purpose
                 writeLog("Found ini file");
@@ -269,32 +270,32 @@ namespace ScriptManager
 
         private void getBolPathFolder()
         {
-            bool isValidPath = false;
-            do {
-                openFileBol.Filter = "BoL Studio|*.exe|DLL Agent|*.dll|All file|*.*";
-                openFileBol.Title = "Please, select your BoL Studio exe or the agent.dll";
+            openFileBol.Filter = "BoL Studio|*.exe|DLL Agent|*.dll|All file|*.*";
+            openFileBol.Title = "Please, select your BoL Studio exe or the agent.dll";
 
-                DialogResult result = openFileBol.ShowDialog();
-                if(result == DialogResult.OK)
+            DialogResult result = openFileBol.ShowDialog();
+            if(result == DialogResult.OK)
+            {
+                bolPath = Path.GetDirectoryName(openFileBol.FileName);
+
+                if((File.Exists(bolPath + "/"+BOL_NAME) && File.Exists(bolPath + "/"+DLL_NAME)) || File.Exists(bolPath + "/agent.txt"))
                 {
-                    bolPath = Path.GetDirectoryName(openFileBol.FileName);
-
-                    if((File.Exists(bolPath + "/"+BOLNAME) && File.Exists(bolPath + "/"+DLLNAME)) || File.Exists(bolPath + "/agent.txt"))
-                    {
-                        // we got some good things
-                        createFreshConfigFile();
-                        isValidPath = true;
-                    }
-                    else
-                    {
-                        writeLog("BoL Studio or agent.dll not found. Error N07F01D3R.");
-                        MessageBox.Show("Impossible to find folder.", "An error occured");
-                    }
-                }else {
-                    writeLog("User cancelled file pick.");
+                    // we got some good things
+                    createFreshConfigFile();
+                    openFileBol.Dispose();
+                }
+                else
+                {
+                    writeLog("BoL Studio or agent.dll not found. Error N07F01D3R.");
+                    MessageBox.Show("Impossible to find folder.", "An error occured");
+                    openFileBol.Dispose();
                     Application.Exit();
                 }
-            }while(!isValidPath);
+            }else {
+                writeLog("User cancelled file pick.");
+                openFileBol.Dispose();
+                Application.Exit();
+            }
         }
 
         #region Config file management
@@ -306,19 +307,19 @@ namespace ScriptManager
             conf["Settings"]["replace"].BoolValue = replaceScript;
             conf["Settings"]["move"].BoolValue = moveScript;
             conf["Settings"]["language"].StringValue = culture;
-            conf["Constant"]["bolName"].StringValue = BOLNAME;
-            conf["Constant"]["dllName"].StringValue = DLLNAME;
+            conf["Constant"]["bolName"].StringValue = BOL_NAME;
+            conf["Constant"]["dllName"].StringValue = DLL_NAME;
             conf["Debug"]["debug"].BoolValue = true;
             Section section = new Section("Scripts");
             conf.Add(section);
-            conf.SaveToFile(INIFILE);
+            conf.SaveToFile(INI_FILE);
         }
 
         private void loadSettingsFromConfig()
         {
-            Configuration conf = Configuration.LoadFromFile(INIFILE); 
+            Configuration conf = Configuration.LoadFromFile(INI_FILE); 
             bolPath = Convert.ToString(conf["Path"]["bolPath"].StringValue);
-            if ((File.Exists(bolPath + "/"+ BOLNAME) && File.Exists(bolPath + "/"+ DLLNAME))|| File.Exists(bolPath + "/agent.txt"))
+            if ((File.Exists(bolPath + "/"+ BOL_NAME) && File.Exists(bolPath + "/"+ DLL_NAME))|| File.Exists(bolPath + "/agent.txt"))
             {
                 // ready to go
                 writeLog("Found files, seems we are ready.");
@@ -346,23 +347,23 @@ namespace ScriptManager
 
         private static void writeStringSettingsToConf(string section, string key, string value)
         {
-            Configuration conf = Configuration.LoadFromFile(INIFILE); 
+            Configuration conf = Configuration.LoadFromFile(INI_FILE); 
             conf[section][key].StringValue = value;
-            conf.SaveToFile(INIFILE);
+            conf.SaveToFile(INI_FILE);
         }
 
         private static void writeBoolSettingsToConf(string section, string key, bool value)
         {
-            Configuration conf = Configuration.LoadFromFile(INIFILE); 
+            Configuration conf = Configuration.LoadFromFile(INI_FILE); 
             conf[section][key].BoolValue = value;
-            conf.SaveToFile(INIFILE);
+            conf.SaveToFile(INI_FILE);
         }
 
         private static void writeIntSettingsToConf(string section, string key, int value)
         {
-            Configuration conf = Configuration.LoadFromFile(INIFILE); 
+            Configuration conf = Configuration.LoadFromFile(INI_FILE); 
             conf[section][key].IntValue = value;
-            conf.SaveToFile(INIFILE);
+            conf.SaveToFile(INI_FILE);
         }
 
         #endregion
@@ -380,11 +381,8 @@ namespace ScriptManager
             var championsDataSource = new List<ComboBoxItem>();
             championsDataSource.Add(new ComboBoxItem("Select a champion", "default"));
 
-            var champions = getChampionsListFromUrl("http://bol-tools.com/api/list/champions").OrderBy(c => c.Name);
-            foreach (var champion in champions)
-            {
-                championsDataSource.Add(new ComboBoxItem(champion.Name, champion.Key));
-            }
+            var champions = getChampionsListFromUrl(apiGetChampionList).OrderBy(c => c.Name);
+            championsDataSource.AddRange(champions.Select(champion => new ComboBoxItem(champion.Name, champion.Key)));
 
             // set display & value, readonly
             cboChampionsList.DataSource = championsDataSource;
@@ -458,7 +456,7 @@ namespace ScriptManager
                     browser = key.GetValue(null).ToString().ToLower().Replace("\"", "");
                     if(!browser.EndsWith("exe"))
                     {
-                        browser = browser.Substring(0, browser.LastIndexOf(".exe") + 4);
+                        browser = browser.Substring(0, browser.LastIndexOf(".exe", StringComparison.Ordinal) + 4);
                     }
                     key.Close();
                 }
@@ -484,10 +482,8 @@ namespace ScriptManager
         private void checkScriptsLoadedListCount()
         {
             int listCount = 0;
-            foreach(var item in listScriptsLoaded.Items)
-            {
-                listCount++;
-            }
+
+            listCount = listScriptsLoaded.Items.Count;
 
             if (listCount > 5)
             {
