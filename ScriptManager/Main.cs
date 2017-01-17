@@ -64,6 +64,18 @@ namespace ScriptManager
 
             // get app path
             writeLog("App path: " + Path.GetDirectoryName(Application.ExecutablePath));
+            
+            writeLog("Checking internet access");
+            if(CheckForInternetConnection())
+            {
+                writeLog("Internet connection is working");
+            }
+            else
+            {
+                writeLog("Internet connection is bugged. Exit now.");
+                MessageBox.Show("There is an error with your internet connection.\n\n Application will now exit.", "Internet connexion issue");
+                Environment.Exit(1);
+            }
 
             // check version for auto-update
             version = Assembly.GetEntryAssembly().GetName().Version;
@@ -301,6 +313,37 @@ namespace ScriptManager
                 writeLog("User cancelled file pick.");
                 openFileBol.Dispose();
                 Application.Exit();
+            }
+        }
+
+        public static bool CheckForInternetConnection()
+        {
+            try
+            {
+                using (var client = new WebClient())
+                {
+                    var apiConnexion = false;
+                    var githubConnexion = false;
+
+                    using (var stream = client.OpenRead(apiGetChampionList))
+                    {
+                        apiConnexion = true;
+                    }
+
+                    using (var stream = client.OpenRead(onlineVersionUrl))
+                    {
+                        githubConnexion = true;
+                    }
+
+                    if (apiConnexion && githubConnexion)
+                        return true;
+                    else
+                        return false;
+                }
+            }
+            catch
+            {
+                return false;
             }
         }
 
@@ -700,9 +743,52 @@ namespace ScriptManager
             checkScriptsLoadedListCount();
         }
 
+        private void btnDeleteSelected_Click(object sender, EventArgs e)
+        {
+            // delete selected script
+            var listScript = new List<string>();
+
+            foreach (var script in listScriptsNotLoaded.SelectedItems)
+            {
+                try
+                {
+                    var filePath = Path.GetFullPath(bolPath + "/NotScripts/" + script.ToString());
+                    writeLog("trying to delete: " + filePath);
+                    if (File.Exists(filePath))
+                    {
+                        File.Delete(filePath);
+                        listScriptsNotLoaded.Items.Remove(script);
+                        writeLog("Successfully deleted");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    writeLog("An error occured while deleting the file");
+                }
+            }
+
+            foreach (var script in listScriptsLoaded.SelectedItems)
+            {
+                try
+                {
+                    var filePath = Path.GetFullPath(bolPath + "/Scripts/" + script.ToString());
+                    writeLog("trying to delete: " + filePath);
+                    if (File.Exists(filePath))
+                    {
+                        File.Delete(filePath);
+                        listScriptsNotLoaded.Items.Remove(script);
+                        writeLog("Successfully deleted");
+                    }
+                }
+                catch
+                {
+                    writeLog("An error occured while deleting the file");
+                }
+            }
+        }
+
+
         #endregion
-
-
 
     }
 }

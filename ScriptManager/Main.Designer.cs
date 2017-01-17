@@ -64,6 +64,8 @@
             this.tabAbout = new System.Windows.Forms.TabPage();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lAuthor = new System.Windows.Forms.Label();
+            this.btnEditSelected = new System.Windows.Forms.Button();
+            this.btnDeleteSelected = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.grid_champions)).BeginInit();
             this.tabControl.SuspendLayout();
             this.tabMain.SuspendLayout();
@@ -79,19 +81,19 @@
             // 
             // cboChampionsList
             // 
-            resources.ApplyResources(this.cboChampionsList, "cboChampionsList");
             this.cboChampionsList.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cboChampionsList.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboChampionsList.FormattingEnabled = true;
+            resources.ApplyResources(this.cboChampionsList, "cboChampionsList");
             this.cboChampionsList.Name = "cboChampionsList";
             this.cboChampionsList.SelectedIndexChanged += new System.EventHandler(this.cboChampionsList_SelectedIndexChanged);
             // 
             // grid_champions
             // 
-            resources.ApplyResources(this.grid_champions, "grid_champions");
             this.grid_champions.AllowUserToAddRows = false;
             this.grid_champions.AllowUserToDeleteRows = false;
             this.grid_champions.AllowUserToOrderColumns = true;
+            resources.ApplyResources(this.grid_champions, "grid_champions");
             this.grid_champions.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.grid_champions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grid_champions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -150,7 +152,6 @@
             // openFileBol
             // 
             this.openFileBol.FileName = "openFileBol";
-            resources.ApplyResources(this.openFileBol, "openFileBol");
             // 
             // tabControl
             // 
@@ -165,13 +166,13 @@
             // 
             // tabMain
             // 
-            resources.ApplyResources(this.tabMain, "tabMain");
             this.tabMain.Controls.Add(this.lDownloadDetails);
             this.tabMain.Controls.Add(this.lDownload);
             this.tabMain.Controls.Add(this.downloadBar);
             this.tabMain.Controls.Add(this.cboCategoryList);
             this.tabMain.Controls.Add(this.grid_champions);
             this.tabMain.Controls.Add(this.cboChampionsList);
+            resources.ApplyResources(this.tabMain, "tabMain");
             this.tabMain.Name = "tabMain";
             this.tabMain.UseVisualStyleBackColor = true;
             // 
@@ -192,20 +193,22 @@
             // 
             // cboCategoryList
             // 
-            resources.ApplyResources(this.cboCategoryList, "cboCategoryList");
             this.cboCategoryList.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cboCategoryList.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboCategoryList.FormattingEnabled = true;
+            resources.ApplyResources(this.cboCategoryList, "cboCategoryList");
             this.cboCategoryList.Name = "cboCategoryList";
             this.cboCategoryList.SelectedIndexChanged += new System.EventHandler(this.cboCategoryList_SelectedIndexChanged);
             // 
             // tabManage
             // 
-            resources.ApplyResources(this.tabManage, "tabManage");
+            this.tabManage.Controls.Add(this.btnDeleteSelected);
+            this.tabManage.Controls.Add(this.btnEditSelected);
             this.tabManage.Controls.Add(this.btnMoveToLoaded);
             this.tabManage.Controls.Add(this.btnMoveToNotLoaded);
             this.tabManage.Controls.Add(this.listScriptsNotLoaded);
             this.tabManage.Controls.Add(this.listScriptsLoaded);
+            resources.ApplyResources(this.tabManage, "tabManage");
             this.tabManage.Name = "tabManage";
             this.tabManage.UseVisualStyleBackColor = true;
             // 
@@ -237,18 +240,18 @@
             // 
             // tabSettings
             // 
-            resources.ApplyResources(this.tabSettings, "tabSettings");
             this.tabSettings.Controls.Add(this.groupLanguage);
             this.tabSettings.Controls.Add(this.groupDebug);
             this.tabSettings.Controls.Add(this.groupBasic);
+            resources.ApplyResources(this.tabSettings, "tabSettings");
             this.tabSettings.Name = "tabSettings";
             this.tabSettings.UseVisualStyleBackColor = true;
             // 
             // groupLanguage
             // 
-            resources.ApplyResources(this.groupLanguage, "groupLanguage");
             this.groupLanguage.Controls.Add(this.lblLanguage);
             this.groupLanguage.Controls.Add(this.cboLanguage);
+            resources.ApplyResources(this.groupLanguage, "groupLanguage");
             this.groupLanguage.Name = "groupLanguage";
             this.groupLanguage.TabStop = false;
             // 
@@ -259,8 +262,8 @@
             // 
             // cboLanguage
             // 
-            resources.ApplyResources(this.cboLanguage, "cboLanguage");
             this.cboLanguage.FormattingEnabled = true;
+            resources.ApplyResources(this.cboLanguage, "cboLanguage");
             this.cboLanguage.Name = "cboLanguage";
             this.cboLanguage.SelectedIndexChanged += new System.EventHandler(this.cboLanguage_SelectedIndexChanged);
             // 
@@ -292,9 +295,9 @@
             // 
             // groupBasic
             // 
-            resources.ApplyResources(this.groupBasic, "groupBasic");
             this.groupBasic.Controls.Add(this.cbAddAutoupdate);
             this.groupBasic.Controls.Add(this.cbMoveScripts);
+            resources.ApplyResources(this.groupBasic, "groupBasic");
             this.groupBasic.Name = "groupBasic";
             this.groupBasic.TabStop = false;
             // 
@@ -330,9 +333,9 @@
             // 
             // tabAbout
             // 
-            resources.ApplyResources(this.tabAbout, "tabAbout");
             this.tabAbout.Controls.Add(this.pictureBox1);
             this.tabAbout.Controls.Add(this.lAuthor);
+            resources.ApplyResources(this.tabAbout, "tabAbout");
             this.tabAbout.Name = "tabAbout";
             this.tabAbout.UseVisualStyleBackColor = true;
             // 
@@ -346,6 +349,19 @@
             // 
             resources.ApplyResources(this.lAuthor, "lAuthor");
             this.lAuthor.Name = "lAuthor";
+            // 
+            // btnEditSelected
+            // 
+            resources.ApplyResources(this.btnEditSelected, "btnEditSelected");
+            this.btnEditSelected.Name = "btnEditSelected";
+            this.btnEditSelected.UseVisualStyleBackColor = true;
+            // 
+            // btnDeleteSelected
+            // 
+            resources.ApplyResources(this.btnDeleteSelected, "btnDeleteSelected");
+            this.btnDeleteSelected.Name = "btnDeleteSelected";
+            this.btnDeleteSelected.UseVisualStyleBackColor = true;
+            this.btnDeleteSelected.Click += new System.EventHandler(this.btnDeleteSelected_Click);
             // 
             // ScriptManagerForm
             // 
@@ -414,6 +430,8 @@
         private System.Windows.Forms.DataGridViewButtonColumn Download;
         private System.Windows.Forms.DataGridViewTextBoxColumn DownloadUrl;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button btnDeleteSelected;
+        private System.Windows.Forms.Button btnEditSelected;
     }
 }
 
